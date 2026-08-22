@@ -1,10 +1,9 @@
 import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
 
 /**
  * No-op middleware (Clerk auth disabled for local development).
  */
-export function middleware(_req: NextRequest) {
+export function middleware() {
   return NextResponse.next();
 }
 
