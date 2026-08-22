@@ -1,0 +1,180 @@
+{
+  "demos": [
+    {
+      "project": {
+        "id": "demo-hyd-it-green-pilot",
+        "name": "IT campus — low-carbon procurement pilot (Hyderabad)",
+        "carbonBudget": 1650000,
+        "costCeiling": 56000000,
+        "assumedBuildingArea": 18500,
+        "createdAt": "2025-08-01T00:00:00.000Z",
+        "updatedAt": "2025-08-01T00:00:00.000Z"
+      },
+      "assumedBuildingArea": 18500,
+      "materials": [
+        {
+          "materialId": "steel-011",
+          "quantity": 168000,
+          "description": "EAF-route TMT for towers + podium (order-of-magnitude for a major concrete package)"
+        },
+        {
+          "materialId": "cement-011",
+          "quantity": 1120000,
+          "description": "PSC for slabs and shear walls—slag blend vs typical OPC"
+        },
+        {
+          "materialId": "aggregates-011",
+          "quantity": 3850000,
+          "description": "M-sand and concrete fine aggregate for on-site batching"
+        },
+        {
+          "materialId": "glass-011",
+          "quantity": 5200,
+          "description": "Curtain-wall DGU for office blocks (façade area scale)"
+        },
+        {
+          "materialId": "insulation-011",
+          "quantity": 14800,
+          "description": "Rockwool in metal façade cavities—perimeter insulation"
+        },
+        {
+          "materialId": "timber-011",
+          "quantity": 68,
+          "description": "Certified plywood for formwork and interior packages (m³)"
+        }
+      ]
+    },
+    {
+      "project": {
+        "id": "demo-mumbai-bkc-office",
+        "name": "Grade A office — BKC Mumbai (shell + façade package)",
+        "carbonBudget": 2100000,
+        "costCeiling": 92000000,
+        "assumedBuildingArea": 22000,
+        "createdAt": "2025-09-12T00:00:00.000Z",
+        "updatedAt": "2025-09-12T00:00:00.000Z"
+      },
+      "assumedBuildingArea": 22000,
+      "materials": [
+        {
+          "materialId": "steel-003",
+          "quantity": 195000,
+          "description": "ISMB / built-up sections for composite deck and core steel"
+        },
+        {
+          "materialId": "cement-003",
+          "quantity": 1450000,
+          "description": "Blended cement for high-strength floor slabs"
+        },
+        {
+          "materialId": "glass-003",
+          "quantity": 11800,
+          "description": "Triple-height lobby + typical floor DGU (façade-heavy office)"
+        },
+        {
+          "materialId": "insulation-004",
+          "quantity": 19200,
+          "description": "EPS + system for rain-screen façade build-up"
+        },
+        {
+          "materialId": "aggregates-003",
+          "quantity": 5100000,
+          "description": "20mm + 10mm aggregates for pumped concrete"
+        },
+        {
+          "materialId": "timber-003",
+          "quantity": 110,
+          "description": "BWR plywood for lift lobbies and feature ceilings"
+        }
+      ]
+    },
+    {
+      "project": {
+        "id": "demo-lucknow-affordable-housing",
+        "name": "Affordable housing — multi-tower (Lucknow)",
+        "carbonBudget": 980000,
+        "costCeiling": 42000000,
+        "assumedBuildingArea": 9600,
+        "createdAt": "2025-10-05T00:00:00.000Z",
+        "updatedAt": "2025-10-05T00:00:00.000Z"
+      },
+      "assumedBuildingArea": 9600,
+      "materials": [
+        {
+          "materialId": "steel-001",
+          "quantity": 92000,
+          "description": "Fe500D rebar for RCC frame + shear walls (typical kg/m² band)"
+        },
+        {
+          "materialId": "cement-002",
+          "quantity": 720000,
+          "description": "PPC for mass concrete and masonry mortar"
+        },
+        {
+          "materialId": "glass-001",
+          "quantity": 3800,
+          "description": "Clear float for balconies + stair windows"
+        },
+        {
+          "materialId": "insulation-002",
+          "quantity": 7400,
+          "description": "Roof and external wall insulation (code-driven U-value)"
+        },
+        {
+          "materialId": "aggregates-002",
+          "quantity": 2650000,
+          "description": "River sand + crushed stone for RMC and masonry"
+        },
+        {
+          "materialId": "timber-002",
+          "quantity": 42,
+          "description": "Sal wood for door frames / shuttering (m³)"
+        }
+      ]
+    },
+    {
+      "project": {
+        "id": "demo-gujarat-cold-storage",
+        "name": "Cold-chain warehouse — NH corridor (Gujarat)",
+        "carbonBudget": 620000,
+        "costCeiling": 38000000,
+        "assumedBuildingArea": 14000,
+        "createdAt": "2025-11-18T00:00:00.000Z",
+        "updatedAt": "2025-11-18T00:00:00.000Z"
+      },
+      "assumedBuildingArea": 14000,
+      "materials": [
+        {
+          "materialId": "steel-010",
+          "quantity": 142000,
+          "description": "Pre-engineered building primary + secondary steel"
+        },
+        {
+          "materialId": "cement-002",
+          "quantity": 480000,
+          "description": "PPC for floor slabs and aprons"
+        },
+        {
+          "materialId": "glass-005",
+          "quantity": 2100,
+          "description": "Skylights and high-level windows for daylighting"
+        },
+        {
+          "materialId": "insulation-006",
+          "quantity": 24800,
+          "description": "Cold-room envelope insulation (roof + wall panels)"
+        },
+        {
+          "materialId": "aggregates-007",
+          "quantity": 1980000,
+          "description": "Structural fill and yard concrete aggregate"
+        },
+        {
+          "materialId": "timber-005",
+          "quantity": 36,
+          "description": "Office and guard-room fit-out timber (m³)"
+        }
+      ]
+    }
+  ]
+}
