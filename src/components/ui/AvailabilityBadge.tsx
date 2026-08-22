@@ -21,7 +21,7 @@ export function AvailabilityBadge({
   availability,
   size = "sm",
   showTooltip = true,
-  showRiskScore = false,
+  showRiskScore = true,
   className = "",
 }: AvailabilityBadgeProps) {
   const data = materialName ? getAvailabilityForMaterial(materialName) : null;
@@ -34,11 +34,11 @@ export function AvailabilityBadge({
     size === "lg"
       ? "text-xs px-3 py-1 gap-1.5"
       : size === "md"
-      ? "text-[11px] px-2.5 py-0.5 gap-1.5"
-      : "text-[10px] px-2 py-0.5 gap-1";
+      ? "text-[11px] px-2.5 py-1 gap-1.5"
+      : "text-[10px] px-2 py-0.5 gap-1.5";
 
   const tooltipText = data
-    ? `Manufacturing dependency: ${data.manufacturingDependency.slice(0, 3).join(", ")} | Shortage Impact: ${data.shortageImpact}`
+    ? `Manufacturing dependency: ${data.manufacturingDependency.slice(0, 3).join(", ")} | Semiconductor Shortage Impact: ${data.shortageImpact} (${risk?.riskScore}/100)`
     : "Supply chain & industrial automation availability index";
 
   return (
@@ -49,8 +49,9 @@ export function AvailabilityBadge({
       <span className={`w-1.5 h-1.5 rounded-full ${badge.dotColor} shrink-0 animate-pulse`} />
       <span>{badge.label}</span>
       {showRiskScore && risk && (
-        <span className="opacity-90 font-semibold border-l border-current/30 pl-1.5 ml-0.5">
-          Risk: {risk.riskScore}/100
+        <span className="opacity-90 font-semibold border-l border-current/30 pl-1.5 ml-0.5 flex items-center gap-1">
+          <span>⚡ Semi Risk:</span>
+          <span className="font-bold">{risk.riskScore}/100</span>
         </span>
       )}
     </span>
@@ -74,8 +75,8 @@ export function SemiconductorRiskBadge({
     size === "lg"
       ? "text-xs px-3 py-1 gap-1.5"
       : size === "md"
-      ? "text-[11px] px-2.5 py-0.5 gap-1.5"
-      : "text-[10px] px-2 py-0.5 gap-1";
+      ? "text-[11px] px-2.5 py-1 gap-1.5"
+      : "text-[10px] px-2 py-0.5 gap-1.5";
 
   const tooltipText = `Industrial automation dependency: ${risk.manufacturingDependency.slice(0, 3).join(", ")} (Shortage impact: ${risk.shortageImpact})`;
 
@@ -85,7 +86,7 @@ export function SemiconductorRiskBadge({
       className={`inline-flex items-center rounded-full font-medium border font-mono tracking-tight transition-all duration-200 ${risk.bgClass} ${sizeClasses} ${className}`}
     >
       <span className={`w-1.5 h-1.5 rounded-full ${risk.dotColor} shrink-0`} />
-      <span>Shortage Risk: <strong>{risk.riskScore}/100</strong></span>
+      <span>⚡ Semiconductor Risk: <strong className="font-bold">{risk.riskScore}/100</strong> ({risk.riskLevel})</span>
     </span>
   );
 }

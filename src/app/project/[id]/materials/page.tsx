@@ -16,6 +16,7 @@ import { notifyError, notifyInfo, notifySuccess } from "@/lib/toast";
 import { formatInr, formatKgCo2e } from "@/lib/utils";
 import { buildProjectMaterial } from "@/lib/materials";
 import { AvailabilityBadge } from "@/components/ui/AvailabilityBadge";
+import { getSemiconductorRisk } from "@/lib/availability";
 import type { AlternativeSuggestion, MaterialEntry } from "@/types";
 
 export default function MaterialsPage() {
@@ -120,64 +121,62 @@ export default function MaterialsPage() {
   return (
     <>
       <Nav projectId={id} />
-      <main className="page-shell">
+      <main className="page-shell pb-16">
         <Link
           href={`/project/${id}`}
           className="text-sm text-accent hover:underline"
         >
-          ← Dashboard
+          ← Back to project
         </Link>
-        <p className="eyebrow mt-8">Bill of materials</p>
-        <h1 className="mt-2 text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
-          Materials
+        <h1 className="mt-4 text-2xl font-semibold text-foreground">
+          Materials & EPDs
         </h1>
-        <p className="mt-2 max-w-2xl text-muted">
-          Add lines, swap suppliers, and explore lower-carbon alternatives.
+        <p className="mt-1 text-sm text-muted">
+          Add lines with supplier quotes, or browse the database. Quantities must
+          be positive.
         </p>
 
-        {materials.length < 4 && (
-          <Card className="mt-8 border-accent/30 bg-accent/5">
-            <h2 className="text-lg font-medium text-foreground">
-              Suggested starters
-            </h2>
-            <p className="mt-1 text-sm text-muted">
-              Quick-add typical line items to begin comparing embodied carbon.
+        {materials.length === 0 && (
+          <div className="mt-4 rounded-xl border border-accent/35 bg-accent/10 p-4 text-sm text-foreground">
+            <p className="font-medium">Need sample data?</p>
+            <p className="mt-1 text-muted">
+              Add our 4 starter materials (structural glass, insulation,
+              aggregates, and frosted glass) to test optimization and reports
+              instantly.
             </p>
-            <div className="mt-4 flex flex-wrap gap-2">
-              {DEFAULT_STARTER_MATERIALS.map((s) => {
-                const mat = getMaterialById(s.materialId);
-                if (!mat) return null;
-                return (
-                  <Button
-                    key={s.materialId}
-                    type="button"
-                    variant="secondary"
-                    onClick={() => {
-                      const pm = buildProjectMaterial(mat, s.defaultQty);
-                      addMaterial(pm);
-                      notifySuccess(
-                        "Added",
-                        `${mat.name} (${s.defaultQty} ${mat.unit})`,
-                      );
-                    }}
-                  >
-                    + {s.label}
-                  </Button>
+            <Button
+              type="button"
+              className="mt-3"
+              onClick={() => {
+                for (const row of DEFAULT_STARTER_MATERIALS) {
+                  const entry = getMaterialById(row.materialId);
+                  if (entry) {
+                    addMaterial(
+                      buildProjectMaterial(entry, row.defaultQty),
+                    );
+                  }
+                }
+                notifySuccess(
+                  "Starter materials added",
+                  "Added sample lines to your project.",
                 );
-              })}
-            </div>
-          </Card>
+              }}
+            >
+              Add sample materials
+            </Button>
+          </div>
         )}
 
         <Card className="mt-6">
-          <h2 className="text-lg font-medium text-foreground">Add with AI</h2>
+          <h2 className="text-lg font-medium text-foreground">Add material</h2>
+          <p className="mt-1 text-sm text-muted">
+            Describe what you need in plain English (e.g. &ldquo;1000 kg TMT 500D
+            rebar&rdquo;).
+          </p>
           <MaterialInput
             onAdd={(pm) => {
               addMaterial(pm);
-              notifySuccess(
-                "Material added",
-                `${pm.materialName} added to project.`,
-              );
+              notifySuccess("Material added", `${pm.materialName} added.`);
             }}
             existingMaterialIds={materials.map((m) => m.materialId)}
           />
@@ -288,9 +287,7 @@ export default function MaterialsPage() {
             Lower-carbon alternatives
           </h2>
           <p className="mt-1 text-sm text-muted">
-            Options per line item. Δ values are from the last refresh (swap or
-            qty edits do not reload the list). Use refresh to recalculate after
-            quantity changes.
+            Options per line item with real-time carbon reduction, price change, and semiconductor shortage resilience metrics.
           </p>
           <div className="mt-4 flex flex-wrap items-center gap-3">
             <Button
@@ -323,19 +320,21 @@ export default function MaterialsPage() {
             </p>
           )}
           {!altLoading && materials.length > 0 && (
-            <div className="mt-4 space-y-8">
+            <div className="mt-6 space-y-8">
               {materials.map((line) => {
                 const row = suggestionsByLineId.get(line.id) ?? [];
+                const curRisk = getSemiconductorRisk(line.materialName).riskScore;
+
                 return (
                   <div
                     key={line.id}
                     className="border-b border-divide pb-6 last:border-0"
                   >
-                    <div className="flex flex-wrap items-center justify-between gap-2 font-medium text-foreground">
+                    <div className="flex flex-wrap items-center justify-between gap-2 p-3 rounded-xl bg-card/60 border border-border">
                       <div className="flex items-center gap-2">
-                        <span>{line.materialName}</span>
-                        <span className="text-sm font-normal text-muted">
-                          ({line.quantity} {line.unit})
+                        <span className="font-semibold text-foreground">{line.materialName}</span>
+                        <span className="text-xs text-muted">
+                          ({line.quantity.toLocaleString()} {line.unit})
                         </span>
                       </div>
                       <AvailabilityBadge
@@ -345,7 +344,7 @@ export default function MaterialsPage() {
                       />
                     </div>
                     {row.length === 0 ? (
-                      <p className="mt-2 text-sm text-muted">
+                      <p className="mt-3 text-sm text-muted">
                         No lower-carbon catalog swap found for this line. Try
                         Refresh suggestions after changing quantities.
                       </p>
@@ -353,20 +352,23 @@ export default function MaterialsPage() {
                       <ul className="mt-3 space-y-3">
                         {row.map((a) => {
                           const applied = line.materialId === a.alternative.id;
+                          const altRisk = a.alternativeRiskScore ?? getSemiconductorRisk(a.alternative.name).riskScore;
+                          const riskDelta = altRisk - curRisk;
+
                           return (
                             <li
                               key={`${line.id}-${a.alternative.id}-${a.alternativeSupplier.id}`}
-                              className={`rounded border p-3 text-sm text-foreground ${
+                              className={`rounded-xl border p-4 text-sm text-foreground transition-all duration-200 ${
                                 applied
                                   ? "border-border/60 bg-muted/30 opacity-80"
-                                  : "border-border bg-card/50"
+                                  : "border-border bg-card/80 hover:border-accent/30"
                               }`}
                             >
-                              <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
+                              <div className="flex flex-wrap items-center justify-between gap-2 mb-2 pb-2 border-b border-border/40">
                                 <div className="flex items-center gap-2 font-semibold text-foreground">
-                                  <span>→ {a.alternative.name}</span>
+                                  <span className="text-accent text-base">→ {a.alternative.name}</span>
                                   <span className="text-xs font-normal text-muted">
-                                    · {a.alternativeSupplier.name}
+                                    via {a.alternativeSupplier.name}
                                   </span>
                                 </div>
                                 <AvailabilityBadge
@@ -375,34 +377,45 @@ export default function MaterialsPage() {
                                   size="sm"
                                 />
                               </div>
-                              <div className="flex flex-wrap gap-x-4 gap-y-1 text-muted text-xs sm:text-sm">
-                                <span className="text-emerald-700 dark:text-emerald-300">
-                                  Δ carbon {formatKgCo2e(a.carbonSavings)} (
-                                  {a.carbonSavingsPercent.toFixed(1)}%)
+
+                              <div className="flex flex-wrap items-center gap-2 text-xs mb-2.5">
+                                <span className="px-2.5 py-1 rounded-md bg-emerald-500/10 text-emerald-300 border border-emerald-500/20 font-medium">
+                                  🌿 Δ carbon {formatKgCo2e(a.carbonSavings)} ({a.carbonSavingsPercent.toFixed(1)}%)
                                 </span>
                                 <span
-                                  className={
+                                  className={`px-2.5 py-1 rounded-md font-medium border ${
                                     a.costDifference <= 0
-                                      ? "text-emerald-700 dark:text-emerald-300"
-                                      : "text-amber-800 dark:text-amber-200"
-                                  }
+                                      ? "bg-emerald-500/10 text-emerald-300 border-emerald-500/20"
+                                      : "bg-amber-500/10 text-amber-300 border-amber-500/20"
+                                  }`}
                                 >
-                                  Δ cost {formatInr(a.costDifference)} (
-                                  {a.costDifferencePercent.toFixed(1)}%)
+                                  💰 Δ cost {formatInr(a.costDifference)} ({a.costDifferencePercent.toFixed(1)}%)
                                 </span>
-                                {a.currentRiskScore !== undefined && a.alternativeRiskScore !== undefined && (
-                                  <span
-                                    className={
-                                      a.alternativeRiskScore <= a.currentRiskScore
-                                        ? "text-emerald-600 dark:text-emerald-400 font-mono"
-                                        : "text-amber-600 dark:text-amber-400 font-mono"
-                                    }
-                                  >
-                                    Δ shortage risk: {a.alternativeRiskScore - a.currentRiskScore > 0 ? `+${a.alternativeRiskScore - a.currentRiskScore}` : a.alternativeRiskScore - a.currentRiskScore} pts ({a.currentRiskScore} → {a.alternativeRiskScore})
-                                  </span>
-                                )}
+                                <span
+                                  className={`px-2.5 py-1 rounded-md font-mono font-medium border ${
+                                    altRisk <= curRisk
+                                      ? "bg-emerald-500/10 text-emerald-300 border-emerald-500/20"
+                                      : "bg-amber-500/10 text-amber-300 border-amber-500/20"
+                                  }`}
+                                >
+                                  ⚡ Semi Risk: <strong className="text-foreground">{altRisk}/100</strong>
+                                  {riskDelta < 0 ? (
+                                    <span className="ml-1 text-emerald-400 font-bold">
+                                      (Save {Math.abs(riskDelta)} pts vs {curRisk})
+                                    </span>
+                                  ) : riskDelta > 0 ? (
+                                    <span className="ml-1 text-amber-400">
+                                      (+{riskDelta} pts vs {curRisk})
+                                    </span>
+                                  ) : (
+                                    <span className="ml-1 opacity-75">
+                                      (= {curRisk})
+                                    </span>
+                                  )}
+                                </span>
                               </div>
-                              <p className="mt-2 text-label">{a.explanation}</p>
+
+                              <p className="text-xs text-muted leading-relaxed">{a.explanation}</p>
                               {applied ? (
                                 <p className="mt-2 text-xs font-medium text-subtle">
                                   Already in project — this catalog option is
@@ -410,7 +423,7 @@ export default function MaterialsPage() {
                                 </p>
                               ) : null}
                               <Button
-                                className="mt-2"
+                                className="mt-3"
                                 type="button"
                                 disabled={applied}
                                 variant={applied ? "secondary" : "primary"}

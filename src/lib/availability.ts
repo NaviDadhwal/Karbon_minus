@@ -10,37 +10,175 @@ export interface MaterialAvailabilityData {
 }
 
 export const MATERIAL_AVAILABILITY_MAP: Record<string, MaterialAvailabilityData> = {
-  // 1. Acoustic Laminated Glass
+  // Glass
   "acoustic laminated glass": {
     name: "Acoustic Laminated Glass",
     category: "Glass",
     availability: "Medium",
-    manufacturingDependency: [
-      "PLCs",
-      "sensors",
-      "automated cutting systems",
-      "lamination controls",
-    ],
+    manufacturingDependency: ["PLCs", "sensors", "automated cutting systems", "lamination controls"],
     shortageImpact: "Medium",
-    reason:
-      "Manufacturing uses automated glass cutting and lamination equipment controlled by electronic systems.",
+    reason: "Manufacturing uses automated glass cutting and lamination equipment controlled by electronic systems.",
+  },
+  "clear float glass 6mm": {
+    name: "Clear Float Glass 6mm",
+    category: "Glass",
+    availability: "Low",
+    manufacturingDependency: ["furnace sensors", "temperature-control systems", "PLC/DCS", "machine vision", "automated glass-line equipment"],
+    shortageImpact: "High",
+    reason: "Float glass lines rely heavily on continuous automated furnace controls and sensors.",
+  },
+  "dgu low-e 6+12ar+6": {
+    name: "DGU Low-E 6+12Ar+6",
+    category: "Glass",
+    availability: "Low",
+    manufacturingDependency: ["Low-E coating equipment", "automated cutting", "insulating-glass production lines", "gas filling systems", "sealing systems", "inspection systems", "PLCs and sensors"],
+    shortageImpact: "High",
+  },
+  "dgu low-e 6+12ar+6 (curtain wall)": {
+    name: "DGU Low-E 6+12Ar+6 (curtain wall)",
+    category: "Glass",
+    availability: "Low",
+    manufacturingDependency: ["Low-E coating equipment", "automated cutting", "insulating-glass production lines", "gas filling systems", "sealing systems", "inspection systems", "PLCs and sensors"],
+    shortageImpact: "High",
+  },
+  "fire-rated glass": {
+    name: "Fire-Rated Glass",
+    category: "Glass",
+    availability: "Low",
+    manufacturingDependency: ["automated lamination lines", "gel curing controls", "temperature and chemical dosing sensors", "PLCs"],
+    shortageImpact: "High",
+  },
+  "frosted privacy glass": {
+    name: "Frosted Privacy Glass",
+    category: "Glass",
+    availability: "Medium",
+    manufacturingDependency: ["sandblasting / chemical-etching machines", "PLC conveyors", "sensors"],
+    shortageImpact: "Medium",
+  },
+  "laminated glass": {
+    name: "Laminated Glass",
+    category: "Glass",
+    availability: "Medium",
+    manufacturingDependency: ["autoclaves", "temperature sensors", "pressure sensors", "automated loading/cutting systems", "PLCs"],
+    shortageImpact: "Medium",
+  },
+  "low-e double glazed unit": {
+    name: "Low-E Double Glazed Unit",
+    category: "Glass",
+    availability: "Low",
+    manufacturingDependency: ["sputtering coating machines", "DGU assembly lines", "gas filling sensors", "PLC controls"],
+    shortageImpact: "High",
+  },
+  "spandrel ceramic glass": {
+    name: "Spandrel Ceramic Glass",
+    category: "Glass",
+    availability: "Medium",
+    manufacturingDependency: ["roller-coater machinery", "curing ovens", "temperature sensors", "PLCs"],
+    shortageImpact: "Medium",
+  },
+  "structural glazing panel": {
+    name: "Structural Glazing Panel",
+    category: "Glass",
+    availability: "Low",
+    manufacturingDependency: ["CNC cutting & edge processing", "automated robotic structural silicone dispensing", "curing sensors", "PLC vision systems"],
+    shortageImpact: "High",
+    reason: "Advanced curtain wall glazing fabrication requires high-precision robotic sealant dispensers, automated CNC edging, and PLC vision systems.",
+  },
+  "tinted solar glass": {
+    name: "Tinted Solar Glass",
+    category: "Glass",
+    availability: "Low",
+    manufacturingDependency: ["automated furnace batching", "spectral sensors", "temperature controllers", "PLCs"],
+    shortageImpact: "High",
+  },
+  "toughened safety glass": {
+    name: "Toughened Safety Glass",
+    category: "Glass",
+    availability: "Medium",
+    manufacturingDependency: ["tempering furnaces", "convection blowers", "optical sensors", "PLCs", "VFDs"],
+    shortageImpact: "Medium",
   },
 
-  // 2. Acoustic Mineral Wool
+  // Insulation
   "acoustic mineral wool": {
     name: "Acoustic Mineral Wool",
     category: "Insulation",
     availability: "Medium",
-    manufacturingDependency: [
-      "temperature sensors",
-      "PLCs",
-      "conveyors",
-      "variable-frequency drives",
-    ],
+    manufacturingDependency: ["temperature sensors", "PLCs", "conveyors", "variable-frequency drives"],
+    shortageImpact: "Medium",
+  },
+  "cork board insulation": {
+    name: "Cork Board Insulation",
+    category: "Insulation",
+    availability: "High",
+    manufacturingDependency: ["pressing equipment", "cutting systems", "process-control equipment"],
+    shortageImpact: "Low–Medium",
+  },
+  "eps thermocol board": {
+    name: "EPS Thermocol Board",
+    category: "Insulation",
+    availability: "Medium",
+    manufacturingDependency: ["steam expansion machinery", "block molding equipment", "hot-wire cutting systems", "PLC controls"],
+    shortageImpact: "Medium",
+  },
+  "glass wool roll": {
+    name: "Glass Wool Roll",
+    category: "Insulation",
+    availability: "Medium",
+    manufacturingDependency: ["spinning centrifuges", "curing ovens", "thermal sensors", "PLC controllers"],
+    shortageImpact: "Medium",
+  },
+  "pir foam board": {
+    name: "PIR Foam Board",
+    category: "Insulation",
+    availability: "Low",
+    manufacturingDependency: ["chemical metering equipment", "continuous lamination lines", "temperature sensors", "automated cutting systems", "PLC automation"],
+    shortageImpact: "High",
+  },
+  "recycled denim batt": {
+    name: "Recycled Denim Batt",
+    category: "Insulation",
+    availability: "High",
+    manufacturingDependency: ["textile shredding machines", "garnetting machines", "conveyors", "basic sensor controls"],
+    shortageImpact: "Low",
+  },
+  "reflective foil insulation": {
+    name: "Reflective Foil Insulation",
+    category: "Insulation",
+    availability: "Medium",
+    manufacturingDependency: ["lamination equipment", "foil-bonding machines", "temperature sensors", "drive controllers"],
+    shortageImpact: "Medium",
+  },
+  "rockwool batt insulation": {
+    name: "Rockwool Batt Insulation",
+    category: "Insulation",
+    availability: "Medium",
+    manufacturingDependency: ["furnaces", "spinning machines", "curing ovens", "automated packaging lines", "sensors and PLCs"],
+    shortageImpact: "Medium",
+  },
+  "rockwool curtain wall pack 100mm": {
+    name: "Rockwool curtain wall pack 100mm",
+    category: "Insulation",
+    availability: "Medium",
+    manufacturingDependency: ["furnaces", "spinning machines", "curing ovens", "automated packaging lines", "sensors and PLCs"],
+    shortageImpact: "Medium",
+  },
+  "sheep wool insulation": {
+    name: "Sheep Wool Insulation",
+    category: "Insulation",
+    availability: "High",
+    manufacturingDependency: ["washing lines", "carding equipment", "bonding ovens", "basic automation"],
+    shortageImpact: "Low",
+  },
+  "xps board 50mm": {
+    name: "XPS Board 50mm",
+    category: "Insulation",
+    availability: "Medium",
+    manufacturingDependency: ["extruders", "gas-injection controls", "temperature controllers", "cooling conveyors", "PLCs"],
     shortageImpact: "Medium",
   },
 
-  // 3. Ballast Stone
+  // Aggregates
   "ballast stone": {
     name: "Ballast Stone",
     category: "Aggregates",
@@ -48,59 +186,6 @@ export const MATERIAL_AVAILABILITY_MAP: Record<string, MaterialAvailabilityData>
     manufacturingDependency: ["crusher controls", "conveyor systems", "sensors"],
     shortageImpact: "Low–Medium",
   },
-
-  // 4. Bamboo Composite Board
-  "bamboo composite board": {
-    name: "Bamboo Composite Board",
-    category: "Timber",
-    availability: "Medium",
-    manufacturingDependency: [
-      "pressing equipment",
-      "temperature sensors",
-      "cutting machinery",
-      "PLC controls",
-    ],
-    shortageImpact: "Medium",
-  },
-
-  // 5. Cedar Cladding
-  "cedar cladding": {
-    name: "Cedar Cladding",
-    category: "Timber",
-    availability: "High",
-    manufacturingDependency: ["sawmill equipment", "moisture meters", "CNC equipment"],
-    shortageImpact: "Low",
-  },
-
-  // 6. Clear Float Glass 6mm
-  "clear float glass 6mm": {
-    name: "Clear Float Glass 6mm",
-    category: "Glass",
-    availability: "Low",
-    manufacturingDependency: [
-      "furnace sensors",
-      "temperature-control systems",
-      "PLC/DCS",
-      "machine vision",
-      "automated glass-line equipment",
-    ],
-    shortageImpact: "High",
-  },
-
-  // 7. Cork Board Insulation
-  "cork board insulation": {
-    name: "Cork Board Insulation",
-    category: "Insulation",
-    availability: "High",
-    manufacturingDependency: [
-      "pressing equipment",
-      "cutting systems",
-      "process-control equipment",
-    ],
-    shortageImpact: "Low–Medium",
-  },
-
-  // 8. Crushed Stone 20mm
   "crushed stone 20mm": {
     name: "Crushed Stone 20mm",
     category: "Aggregates",
@@ -108,40 +193,6 @@ export const MATERIAL_AVAILABILITY_MAP: Record<string, MaterialAvailabilityData>
     manufacturingDependency: ["crushers", "conveyors", "VFDs", "sensors"],
     shortageImpact: "Low–Medium",
   },
-
-  // 9. DGU Low-E 6+12Ar+6
-  "dgu low-e 6+12ar+6": {
-    name: "DGU Low-E 6+12Ar+6",
-    category: "Glass",
-    availability: "Low",
-    manufacturingDependency: [
-      "Low-E coating equipment",
-      "automated cutting",
-      "insulating-glass production lines",
-      "gas filling systems",
-      "sealing systems",
-      "inspection systems",
-      "PLCs and sensors",
-    ],
-    shortageImpact: "High",
-  },
-  "dgu low-e 6+12ar+6 (curtain wall)": {
-    name: "DGU Low-E 6+12Ar+6 (curtain wall)",
-    category: "Glass",
-    availability: "Low",
-    manufacturingDependency: [
-      "Low-E coating equipment",
-      "automated cutting",
-      "insulating-glass production lines",
-      "gas filling systems",
-      "sealing systems",
-      "inspection systems",
-      "PLCs and sensors",
-    ],
-    shortageImpact: "High",
-  },
-
-  // 10. Dolomite Chips
   "dolomite chips": {
     name: "Dolomite Chips",
     category: "Aggregates",
@@ -149,464 +200,299 @@ export const MATERIAL_AVAILABILITY_MAP: Record<string, MaterialAvailabilityData>
     manufacturingDependency: ["crushers", "screening systems", "conveyors"],
     shortageImpact: "Low–Medium",
   },
-
-  // 11. EPS Thermocol Board
-  "eps thermocol board": {
-    name: "EPS Thermocol Board",
-    category: "Insulation",
-    availability: "Medium",
-    manufacturingDependency: ["molding machines", "temperature controllers", "PLCs"],
-    shortageImpact: "Medium",
-  },
-
-  // 12. Fire-Rated Glass
-  "fire-rated glass": {
-    name: "Fire-Rated Glass",
-    category: "Glass",
-    availability: "Low",
-    manufacturingDependency: [
-      "specialized glass processing",
-      "coating systems",
-      "furnace controls",
-      "inspection systems",
-    ],
-    shortageImpact: "High",
-  },
-
-  // 13. Fly Ash Aggregate
   "fly ash aggregate": {
     name: "Fly Ash Aggregate",
     category: "Aggregates",
     availability: "Medium",
-    manufacturingDependency: ["mixing systems", "pelletization", "conveyors", "sensors"],
+    manufacturingDependency: ["pelletizing disks", "sintering/curing machinery", "temperature sensors", "PLCs"],
     shortageImpact: "Medium",
   },
-
-  // 14. Fly Ash Blended Cement
-  "fly ash blended cement": {
-    name: "Fly Ash Blended Cement",
-    category: "Cement",
-    availability: "Low",
-    manufacturingDependency: [
-      "kiln PLC/DCS",
-      "grinding systems",
-      "sensors",
-      "variable-frequency drives",
-      "process analyzers",
-    ],
-    shortageImpact: "High",
-  },
-
-  // 15. Frosted Privacy Glass
-  "frosted privacy glass": {
-    name: "Frosted Privacy Glass",
-    category: "Glass",
-    availability: "Medium",
-    manufacturingDependency: [
-      "cutting equipment",
-      "frosting/coating systems",
-      "automated inspection",
-    ],
-    shortageImpact: "Medium–High",
-  },
-
-  // 16. FSC-certified Structural Plywood 19mm
-  "fsc-certified structural plywood 19mm": {
-    name: "FSC-certified Structural Plywood 19mm",
-    category: "Timber",
-    availability: "Medium",
-    manufacturingDependency: [
-      "veneer dryers",
-      "pressing systems",
-      "moisture sensors",
-      "PLC controls",
-    ],
-    shortageImpact: "Medium",
-  },
-
-  // 17. Galvanized Steel Sheet
-  "galvanized steel sheet": {
-    name: "Galvanized Steel Sheet",
-    category: "Steel",
-    availability: "Low",
-    manufacturingDependency: [
-      "PLCs",
-      "VFDs",
-      "temperature sensors",
-      "automated coating lines",
-      "process-control systems",
-    ],
-    shortageImpact: "High",
-  },
-
-  // 18. Glass Wool Roll
-  "glass wool roll": {
-    name: "Glass Wool Roll",
-    category: "Insulation",
-    availability: "Medium",
-    manufacturingDependency: [
-      "furnace controls",
-      "fiberization equipment",
-      "sensors",
-      "PLCs",
-    ],
-    shortageImpact: "Medium–High",
-  },
-
-  // 19. Granite Chips 10mm
   "granite chips 10mm": {
     name: "Granite Chips 10mm",
     category: "Aggregates",
     availability: "High",
-    manufacturingDependency: ["crushers", "screens", "conveyors"],
+    manufacturingDependency: ["crushing plants", "screening decks", "conveyors", "basic sensor monitors"],
     shortageImpact: "Low–Medium",
   },
-
-  // 20. Hardwood Flooring Oak
-  "hardwood flooring oak": {
-    name: "Hardwood Flooring Oak",
-    category: "Timber",
-    availability: "High",
-    manufacturingDependency: ["drying systems", "moisture sensors", "CNC machinery"],
-    shortageImpact: "Low–Medium",
-  },
-
-  // 21. Laminated Glass
-  "laminated glass": {
-    name: "Laminated Glass",
-    category: "Glass",
-    availability: "Medium",
-    manufacturingDependency: [
-      "cutting systems",
-      "lamination equipment",
-      "autoclaves",
-      "sensors",
-      "PLC controls",
-    ],
-    shortageImpact: "Medium–High",
-  },
-
-  // 22. Laterite Gravel
   "laterite gravel": {
     name: "Laterite Gravel",
     category: "Aggregates",
     availability: "High",
-    manufacturingDependency: ["excavation equipment", "crushing", "screening"],
+    manufacturingDependency: ["excavators", "screening plants", "conveyor systems"],
     shortageImpact: "Low",
   },
-
-  // 23. Low-Alkali Cement
-  "low-alkali cement": {
-    name: "Low-Alkali Cement",
-    category: "Cement",
-    availability: "Low",
-    manufacturingDependency: [
-      "kiln controls",
-      "grinding systems",
-      "process sensors",
-      "quality analyzers",
-      "PLC/DCS",
-    ],
-    shortageImpact: "High",
-  },
-
-  // 24. Low-E Double Glazed Unit
-  "low-e double glazed unit": {
-    name: "Low-E Double Glazed Unit",
-    category: "Glass",
-    availability: "Low",
-    manufacturingDependency: [
-      "coating",
-      "cutting",
-      "spacer systems",
-      "gas filling",
-      "sealing",
-      "automated inspection",
-    ],
-    shortageImpact: "High",
-  },
-
-  // 25. M-Sand Manufactured
   "m-sand manufactured": {
     name: "M-Sand Manufactured",
     category: "Aggregates",
-    availability: "Medium",
-    manufacturingDependency: [
-      "crushers",
-      "VSI systems",
-      "screening",
-      "conveyors",
-      "sensors",
-    ],
-    shortageImpact: "Medium",
+    availability: "High",
+    manufacturingDependency: ["VSI crushers", "air classifiers", "moisture sensors", "motor controllers"],
+    shortageImpact: "Low–Medium",
   },
-
-  // 26. Manufactured Sand (M-Sand) Zone II
   "manufactured sand (m-sand) zone ii": {
-    name: "Manufactured Sand (M-Sand) Zone II",
+    name: "Manufactured sand (M-sand) Zone II",
     category: "Aggregates",
-    availability: "Medium",
-    manufacturingDependency: ["crushing", "screening", "grading systems", "sensors"],
-    shortageImpact: "Medium",
+    availability: "High",
+    manufacturingDependency: ["VSI crushers", "air classifiers", "moisture sensors", "motor controllers"],
+    shortageImpact: "Low–Medium",
   },
-
-  // 27. Marine Plywood
-  "marine plywood": {
-    name: "Marine Plywood",
-    category: "Timber",
-    availability: "Medium",
-    manufacturingDependency: [
-      "veneer processing",
-      "drying",
-      "pressing",
-      "quality-control systems",
-    ],
-    shortageImpact: "Medium",
-  },
-
-  // 28. Masonry Cement
-  "masonry cement": {
-    name: "Masonry Cement",
-    category: "Cement",
-    availability: "Low",
-    manufacturingDependency: [
-      "grinding",
-      "blending",
-      "packing automation",
-      "PLC/DCS",
-      "sensors",
-    ],
-    shortageImpact: "High",
-  },
-
-  // 29. MDF Board 18mm
-  "mdf board 18mm": {
-    name: "MDF Board 18mm",
-    category: "Timber",
-    availability: "Medium",
-    manufacturingDependency: [
-      "fiber processing",
-      "resin dosing",
-      "hot pressing",
-      "temperature sensors",
-      "PLC controls",
-    ],
-    shortageImpact: "Medium–High",
-  },
-
-  // 30. Oil Well Cement
-  "oil well cement": {
-    name: "Oil Well Cement",
-    category: "Cement",
-    availability: "Low",
-    manufacturingDependency: [
-      "grinding",
-      "blending",
-      "quality-control analyzers",
-      "automated process control",
-    ],
-    shortageImpact: "High",
-  },
-
-  // 31. OPC 53 Grade Cement
-  "opc 53 grade cement": {
-    name: "OPC 53 Grade Cement",
-    category: "Cement",
-    availability: "Low",
-    manufacturingDependency: [
-      "kiln",
-      "raw mill",
-      "cement mill",
-      "weighing systems",
-      "PLC/DCS",
-      "sensors",
-      "packing automation",
-    ],
-    shortageImpact: "High",
-  },
-
-  // 32. Particle Board E1
-  "particle board e1": {
-    name: "Particle Board E1",
-    category: "Timber",
-    availability: "Medium",
-    manufacturingDependency: [
-      "chip preparation",
-      "resin dosing",
-      "hot pressing",
-      "sensors",
-      "automated controls",
-    ],
-    shortageImpact: "Medium–High",
-  },
-
-  // 33. Pine Plywood BWR
-  "pine plywood bwr": {
-    name: "Pine Plywood BWR",
-    category: "Timber",
-    availability: "Medium",
-    manufacturingDependency: [
-      "drying",
-      "resin application",
-      "pressing",
-      "process controls",
-    ],
-    shortageImpact: "Medium",
-  },
-
-  // 34. PIR Foam Board
-  "pir foam board": {
-    name: "PIR Foam Board",
-    category: "Insulation",
-    availability: "Medium",
-    manufacturingDependency: [
-      "chemical mixing",
-      "foaming systems",
-      "temperature control",
-      "pressure control",
-      "PLCs",
-    ],
-    shortageImpact: "Medium–High",
-  },
-
-  // 35. PPC Cement
-  "ppc cement": {
-    name: "PPC Cement",
-    category: "Cement",
-    availability: "Low",
-    manufacturingDependency: [
-      "grinding",
-      "blending",
-      "process sensors",
-      "packing automation",
-      "PLC/DCS",
-    ],
-    shortageImpact: "High",
-  },
-
-  // 36. PSC 53 Portland Slag Cement
-  "psc 53 portland slag cement": {
-    name: "PSC 53 Portland Slag Cement",
-    category: "Cement",
-    availability: "Low",
-    manufacturingDependency: [
-      "grinding",
-      "blending",
-      "process control",
-      "sensors",
-      "PLC/DCS",
-    ],
-    shortageImpact: "High",
-  },
-  "psc 53 (portland slag cement)": {
-    name: "PSC 53 (Portland Slag Cement)",
-    category: "Cement",
-    availability: "Low",
-    manufacturingDependency: [
-      "grinding",
-      "blending",
-      "process control",
-      "sensors",
-      "PLC/DCS",
-    ],
-    shortageImpact: "High",
-  },
-
-  // 37. PSC Slag Cement
-  "psc slag cement": {
-    name: "PSC Slag Cement",
-    category: "Cement",
-    availability: "Low",
-    manufacturingDependency: [
-      "grinding",
-      "blending",
-      "quality control",
-      "automated process control",
-    ],
-    shortageImpact: "High",
-  },
-
-  // 38. Quarry Dust
   "quarry dust": {
     name: "Quarry Dust",
     category: "Aggregates",
     availability: "High",
-    manufacturingDependency: ["crushers", "conveyors", "screening"],
+    manufacturingDependency: ["crushing byproduct collection", "conveyors"],
     shortageImpact: "Low",
   },
-
-  // 39. Rapid Hardening Cement
-  "rapid hardening cement": {
-    name: "Rapid Hardening Cement",
-    category: "Cement",
-    availability: "Low",
-    manufacturingDependency: [
-      "kiln",
-      "grinding",
-      "blending",
-      "quality-control systems",
-      "PLC/DCS",
-    ],
-    shortageImpact: "High",
-  },
-
-  // 40. Recycled Concrete Aggregate
   "recycled concrete aggregate": {
     name: "Recycled Concrete Aggregate",
     category: "Aggregates",
-    availability: "Medium",
-    manufacturingDependency: [
-      "crushers",
-      "magnetic separators",
-      "screens",
-      "conveyors",
-      "sensors",
-    ],
-    shortageImpact: "Medium",
-  },
-
-  // Additional steel / insulation defaults
-  "tmt fe500d rebar": {
-    name: "TMT Fe500D Rebar",
-    category: "Steel",
-    availability: "Low",
-    manufacturingDependency: ["PLC-controlled rolling mills", "temperature sensors", "VFD drives"],
-    shortageImpact: "High",
-  },
-  "tmt fe550d rebar": {
-    name: "TMT Fe550D Rebar",
-    category: "Steel",
-    availability: "Low",
-    manufacturingDependency: ["PLC-controlled rolling mills", "temperature sensors", "VFD drives"],
-    shortageImpact: "High",
-  },
-  "structural steel section ismb": {
-    name: "Structural Steel Section ISMB",
-    category: "Steel",
-    availability: "Low",
-    manufacturingDependency: ["automated rolling lines", "PLC systems", "laser measurement sensors"],
-    shortageImpact: "High",
-  },
-  "rockwool batt insulation": {
-    name: "Rockwool Batt Insulation",
-    category: "Insulation",
-    availability: "Medium",
-    manufacturingDependency: ["furnace controls", "fiber spinning VFDs", "temperature sensors"],
-    shortageImpact: "Medium",
+    availability: "High",
+    manufacturingDependency: ["impact crushers", "magnetic separators", "screening plants", "drive controls"],
+    shortageImpact: "Low–Medium",
   },
   "river sand fine": {
     name: "River Sand Fine",
     category: "Aggregates",
     availability: "High",
-    manufacturingDependency: ["mechanical dredging", "screening"],
+    manufacturingDependency: ["dredging pumps", "washing plants", "classifiers", "conveyors"],
+    shortageImpact: "Low",
+  },
+
+  // Timber
+  "bamboo composite board": {
+    name: "Bamboo Composite Board",
+    category: "Timber",
+    availability: "Medium",
+    manufacturingDependency: ["pressing equipment", "temperature sensors", "cutting machinery", "PLC controls"],
+    shortageImpact: "Medium",
+  },
+  "cedar cladding": {
+    name: "Cedar Cladding",
+    category: "Timber",
+    availability: "High",
+    manufacturingDependency: ["sawmill equipment", "moisture meters", "CNC equipment"],
+    shortageImpact: "Low",
+  },
+  "fsc-certified structural plywood 19mm": {
+    name: "FSC-certified structural plywood 19mm",
+    category: "Timber",
+    availability: "Medium",
+    manufacturingDependency: ["rotary peeling lathes", "hot presses", "moisture sensors", "glue spreaders", "automated cross-cutting", "PLCs"],
+    shortageImpact: "Medium",
+  },
+  "hardwood flooring oak": {
+    name: "Hardwood Flooring Oak",
+    category: "Timber",
+    availability: "Medium",
+    manufacturingDependency: ["automated kilns", "molding machines", "finishing lines", "sensors and PLCs"],
+    shortageImpact: "Medium",
+  },
+  "marine plywood": {
+    name: "Marine Plywood",
+    category: "Timber",
+    availability: "Medium",
+    manufacturingDependency: ["rotary veneer peelers", "drying machinery", "hot presses", "automated sizing saws", "PLC systems"],
+    shortageImpact: "Medium",
+  },
+  "mdf board 18mm": {
+    name: "MDF Board 18mm",
+    category: "Timber",
+    availability: "Low",
+    manufacturingDependency: ["defibrators", "continuous pressing lines", "thickness gauges", "automated sanding systems", "DCS/PLCs"],
+    shortageImpact: "High",
+  },
+  "particle board e1": {
+    name: "Particle Board E1",
+    category: "Timber",
+    availability: "Medium",
+    manufacturingDependency: ["flakers", "dosing systems", "presses", "PLC controllers", "sensors"],
+    shortageImpact: "Medium",
+  },
+  "pine plywood bwr": {
+    name: "Pine Plywood BWR",
+    category: "Timber",
+    availability: "Medium",
+    manufacturingDependency: ["peeling lathes", "hot presses", "moisture sensors", "cross-cutting saws"],
+    shortageImpact: "Medium",
+  },
+  "rubberwood furniture grade": {
+    name: "Rubberwood Furniture Grade",
+    category: "Timber",
+    availability: "High",
+    manufacturingDependency: ["treatment plants", "kilns", "planers", "temperature controllers"],
+    shortageImpact: "Low–Medium",
+  },
+  "sal wood beams": {
+    name: "Sal Wood Beams",
+    category: "Timber",
+    availability: "High",
+    manufacturingDependency: ["heavy sawmills", "conveyors", "chainsaws", "basic electrical drives"],
     shortageImpact: "Low",
   },
   "teak wood planks": {
     name: "Teak Wood Planks",
     category: "Timber",
     availability: "High",
-    manufacturingDependency: ["sawmill equipment", "kiln drying"],
+    manufacturingDependency: ["sawing machines", "kiln-drying controllers", "planers", "moisture meters"],
     shortageImpact: "Low",
+  },
+
+  // Cement
+  "fly ash blended cement": {
+    name: "Fly Ash Blended Cement",
+    category: "Cement",
+    availability: "Low",
+    manufacturingDependency: ["blending controls", "ball mills/VRMs", "flow sensors", "continuous DCS/PLCs"],
+    shortageImpact: "High",
+  },
+  "low-alkali cement": {
+    name: "Low-Alkali Cement",
+    category: "Cement",
+    availability: "Low",
+    manufacturingDependency: ["kiln sensors", "gas analyzers", "process-control systems", "DCS/PLCs"],
+    shortageImpact: "High",
+  },
+  "masonry cement": {
+    name: "Masonry Cement",
+    category: "Cement",
+    availability: "Medium",
+    manufacturingDependency: ["grinding mills", "weigh-feeders", "automated bagging", "PLCs"],
+    shortageImpact: "Medium",
+  },
+  "oil well cement": {
+    name: "Oil Well Cement",
+    category: "Cement",
+    availability: "Low",
+    manufacturingDependency: ["high-precision chemical analyzers", "calcining controls", "DCS automation"],
+    shortageImpact: "High",
+  },
+  "opc 53 grade cement": {
+    name: "OPC 53 Grade Cement",
+    category: "Cement",
+    availability: "Low",
+    manufacturingDependency: ["rotary kilns", "burners", "cooler drives", "grinding VRMs", "DCS/SCADA automation", "gas analyzers"],
+    shortageImpact: "High",
+    reason: "Modern high-grade cement plants are continuous-process automated operations relying heavily on distributed control systems (DCS), VFDs, and sensors.",
+  },
+  "ppc cement": {
+    name: "PPC Cement",
+    category: "Cement",
+    availability: "Medium",
+    manufacturingDependency: ["pozzolan dosing systems", "grinding automation", "bagging machinery", "PLCs"],
+    shortageImpact: "Medium",
+  },
+  "psc 53 (portland slag cement)": {
+    name: "PSC 53 (Portland Slag Cement)",
+    category: "Cement",
+    availability: "Medium",
+    manufacturingDependency: ["slag dryers", "vertical roller mills", "dosing scales", "PLCs"],
+    shortageImpact: "Medium",
+  },
+  "psc slag cement": {
+    name: "PSC Slag Cement",
+    category: "Cement",
+    availability: "Medium",
+    manufacturingDependency: ["slag dryers", "vertical roller mills", "dosing scales", "PLCs"],
+    shortageImpact: "Medium",
+  },
+  "rapid hardening cement": {
+    name: "Rapid Hardening Cement",
+    category: "Cement",
+    availability: "Low",
+    manufacturingDependency: ["ultra-fine grinding controls", "temperature sensors", "kiln analyzers", "DCS"],
+    shortageImpact: "High",
+  },
+  "sulphate resisting cement": {
+    name: "Sulphate Resisting Cement",
+    category: "Cement",
+    availability: "Low",
+    manufacturingDependency: ["batch chemistry controls", "kiln DCS", "optical pyrometers"],
+    shortageImpact: "High",
+  },
+  "white portland cement": {
+    name: "White Portland Cement",
+    category: "Cement",
+    availability: "Low",
+    manufacturingDependency: ["specialized fuel controls", "gas analyzers", "optical sensors", "automated quenching", "DCS"],
+    shortageImpact: "High",
+  },
+
+  // Steel
+  "galvanized steel sheet": {
+    name: "Galvanized Steel Sheet",
+    category: "Steel",
+    availability: "Low",
+    manufacturingDependency: ["continuous galvanizing lines (CGL)", "zinc bath sensors", "air-knife controls", "skin-pass mills", "DCS/PLCs"],
+    shortageImpact: "High",
+  },
+  "steel angles isa": {
+    name: "Steel Angles ISA",
+    category: "Steel",
+    availability: "Low",
+    manufacturingDependency: ["rolling mills", "cooling bed automation", "flying shears", "PLCs and motor drives"],
+    shortageImpact: "High",
+  },
+  "steel binding wire": {
+    name: "Steel Binding Wire",
+    category: "Steel",
+    availability: "Medium",
+    manufacturingDependency: ["wire drawing machines", "annealing furnaces", "temperature controllers", "spoolers"],
+    shortageImpact: "Medium",
+  },
+  "steel channels ismc": {
+    name: "Steel Channels ISMC",
+    category: "Steel",
+    availability: "Low",
+    manufacturingDependency: ["structural rolling mills", "laser profile measurement", "cooling controls", "PLCs"],
+    shortageImpact: "High",
+  },
+  "steel plates hr": {
+    name: "Steel Plates HR",
+    category: "Steel",
+    availability: "Low",
+    manufacturingDependency: ["reheating furnaces", "roughing/finishing rolling stands", "hydraulic AGC", "cooling headers", "DCS/PLCs"],
+    shortageImpact: "High",
+  },
+  "steel round bars": {
+    name: "Steel Round Bars",
+    category: "Steel",
+    availability: "Low",
+    manufacturingDependency: ["billet rolling lines", "temperature sensors", "automated shears", "PLCs"],
+    shortageImpact: "High",
+  },
+  "steel wire mesh": {
+    name: "Steel Wire Mesh",
+    category: "Steel",
+    availability: "Medium",
+    manufacturingDependency: ["automated mesh welding machines", "pneumatic / servo wire feeders", "weld controllers", "PLCs"],
+    shortageImpact: "Medium",
+  },
+  "structural steel section ismb": {
+    name: "Structural Steel Section ISMB",
+    category: "Steel",
+    availability: "Low",
+    manufacturingDependency: ["heavy section mills", "reheating furnace DCS", "automated roll positioning", "cooling controls", "shearing PLCs"],
+    shortageImpact: "High",
+  },
+  "tmt fe500d (eaf / scrap-based)": {
+    name: "TMT Fe500D (EAF / scrap-based)",
+    category: "Steel",
+    availability: "Low",
+    manufacturingDependency: ["electric arc furnace (EAF) controls", "ladle refining sensors", "continuous casting machines", "thermex quenching automation", "DCS/PLCs"],
+    shortageImpact: "High",
+  },
+  "tmt fe500d rebar": {
+    name: "TMT Fe500D Rebar",
+    category: "Steel",
+    availability: "Low",
+    manufacturingDependency: ["blast furnace/EAF controls", "continuous casting", "high-speed rolling mills", "Thermex water-quenching automation", "PLCs/DCS", "VFDs"],
+    shortageImpact: "High",
+  },
+  "tmt fe550d rebar": {
+    name: "TMT Fe550D Rebar",
+    category: "Steel",
+    availability: "Low",
+    manufacturingDependency: ["precision micro-alloying controls", "quenching automation", "rolling mill drives", "DCS/PLCs"],
+    shortageImpact: "High",
   },
 };
 
@@ -617,15 +503,21 @@ export function getAvailabilityForMaterial(nameOrId: string): MaterialAvailabili
     return MATERIAL_AVAILABILITY_MAP[norm];
   }
 
-  // Substring fuzzy matching
+  // Exact without parentheses
+  const clean = norm.replace(/\(.*?\)/g, "").trim();
+  if (MATERIAL_AVAILABILITY_MAP[clean]) {
+    return MATERIAL_AVAILABILITY_MAP[clean];
+  }
+
+  // Substring matching
   for (const [key, data] of Object.entries(MATERIAL_AVAILABILITY_MAP)) {
-    if (norm.includes(key) || key.includes(norm)) {
+    if (norm.includes(key) || key.includes(norm) || clean.includes(key) || key.includes(clean)) {
       return data;
     }
   }
 
-  // Category based defaults
-  if (norm.includes("cement") || norm.includes("steel")) {
+  // Fallback by category keywords
+  if (norm.includes("cement") || norm.includes("steel") || norm.includes("rebar") || norm.includes("tmt")) {
     return {
       name: nameOrId,
       category: norm.includes("cement") ? "Cement" : "Steel",
@@ -635,13 +527,23 @@ export function getAvailabilityForMaterial(nameOrId: string): MaterialAvailabili
     };
   }
 
-  if (norm.includes("glass") || norm.includes("insulation")) {
+  if (norm.includes("glass") || norm.includes("insulation") || norm.includes("glazing") || norm.includes("wool") || norm.includes("foam")) {
     return {
       name: nameOrId,
-      category: norm.includes("glass") ? "Glass" : "Insulation",
+      category: norm.includes("glass") || norm.includes("glazing") ? "Glass" : "Insulation",
       availability: "Medium",
       manufacturingDependency: ["automated processing lines", "temperature sensors", "PLCs"],
       shortageImpact: "Medium",
+    };
+  }
+
+  if (norm.includes("timber") || norm.includes("wood") || norm.includes("board") || norm.includes("plywood")) {
+    return {
+      name: nameOrId,
+      category: "Timber",
+      availability: "High",
+      manufacturingDependency: ["sawing & pressing machinery", "temperature sensors", "moisture meters"],
+      shortageImpact: "Low–Medium",
     };
   }
 
