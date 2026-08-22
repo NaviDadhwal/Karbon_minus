@@ -114,21 +114,21 @@ export function Nav({
                 </button>
               )}
 
-              {/* Real-time Cart Button */}
+              {/* Real-time Top-Right Cart Button */}
               <button
                 type="button"
                 onClick={() => setIsCartOpen(true)}
                 aria-label={`Open Procurement Cart with ${materials.length} items`}
-                className="relative inline-flex items-center gap-2 px-3 py-1.5 rounded-xl border border-accent/30 bg-accent/10 hover:bg-accent/20 text-foreground transition-all duration-200 group"
+                className="relative inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl border border-accent/40 bg-accent/15 hover:bg-accent/25 text-foreground transition-all duration-200 shadow-[0_0_15px_rgba(23,207,151,0.2)] group"
               >
                 <ShoppingCart className="w-4 h-4 text-accent transition-transform group-hover:scale-110" />
-                <span className="hidden sm:inline font-medium text-xs">Cart</span>
+                <span className="font-semibold text-xs text-foreground">Cart</span>
                 <span
                   className={cn(
-                    "inline-flex items-center justify-center text-[10px] font-bold font-mono px-1.5 py-0.2 rounded-full",
+                    "inline-flex items-center justify-center text-[11px] font-extrabold font-mono px-2 py-0.5 rounded-full",
                     materials.length > 0
-                      ? "bg-accent text-black font-extrabold shadow-sm"
-                      : "bg-white/10 text-muted",
+                      ? "bg-accent text-black shadow-sm"
+                      : "bg-white/15 text-muted",
                   )}
                 >
                   {materials.length}
@@ -172,6 +172,26 @@ export function Nav({
           )}
         </div>
       </header>
+
+      {/* Floating Bottom-Right Quick Cart Action Button (Accessible across all project pages) */}
+      {!minimal && (
+        <button
+          type="button"
+          onClick={() => setIsCartOpen(true)}
+          aria-label={`Open Procurement Cart (${materials.length} items)`}
+          className="fixed bottom-6 right-6 z-40 flex items-center gap-2.5 px-4 py-3 rounded-full bg-accent text-black font-bold text-sm shadow-[0_8px_30px_rgba(23,207,151,0.45)] hover:scale-105 active:scale-95 transition-all duration-300 group border border-black/10 backdrop-blur-md"
+        >
+          <div className="relative">
+            <ShoppingCart className="w-5 h-5 transition-transform group-hover:scale-110" />
+            {materials.length > 0 && (
+              <span className="absolute -top-2 -right-2.5 min-w-[18px] h-[18px] px-1 rounded-full bg-black text-accent text-[10px] flex items-center justify-center font-black font-mono shadow-sm">
+                {materials.length}
+              </span>
+            )}
+          </div>
+          <span className="tracking-tight">View Cart ({materials.length})</span>
+        </button>
+      )}
 
       {/* Global Real-Time Cart Drawer */}
       <CartDrawer isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
