@@ -85,9 +85,9 @@ export default function ReportPage() {
 
   const baseline = project
     ? {
-        cost: project.baselineTotalCost,
-        carbon: project.baselineTotalCarbon,
-      }
+      cost: project.baselineTotalCost,
+      carbon: project.baselineTotalCarbon,
+    }
     : { cost: 0, carbon: 0 };
 
   const savings = useMemo(() => {
@@ -419,27 +419,6 @@ export default function ReportPage() {
             </p>
           )}
         </Card>
-
-        {/* Whole-Lot NFC Material Passport Section */}
-        <div className="glass-panel-strong mt-6 p-6 rounded-2xl border border-accent/40 bg-accent/5 flex flex-wrap items-center justify-between gap-4">
-          <div>
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-accent/20 text-accent text-xs font-mono font-semibold mb-1.5">
-              ● PHYSICAL-TO-DIGITAL VERIFICATION
-            </span>
-            <h3 className="text-lg font-bold text-foreground">
-              Whole-Lot NFC Material Passport
-            </h3>
-            <p className="text-sm text-muted max-w-xl mt-0.5">
-              Generate a unified NFC digital passport for this whole procurement lot (e.g. cement + glass) so suppliers and site engineers can verify carbon reduction and costs on-site.
-            </p>
-          </div>
-          <Link
-            href="/nfc/LOT-SAMPLE"
-            className="px-5 py-3 rounded-xl bg-accent text-slate-950 font-bold text-sm hover:opacity-90 transition flex items-center gap-2 shadow-lg"
-          >
-            Generate Whole-Lot NFC Tag →
-          </Link>
-        </div>
       </main>
     </>
   );
