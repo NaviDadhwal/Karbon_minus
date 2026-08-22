@@ -73,6 +73,16 @@ export function Nav({
             >
               Projects
             </Link>
+            <Link
+              href="/nfc"
+              className={cn(
+                "relative pb-1 text-foreground transition-colors duration-300 after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-full after:origin-left after:scale-x-0 after:rounded-full after:bg-accent after:transition-transform after:duration-300 hover:text-accent hover:after:scale-x-100",
+                pathname.startsWith("/nfc") &&
+                  "font-medium text-accent after:scale-x-100",
+              )}
+            >
+              NFC Passports
+            </Link>
             {links.map((l) => (
               <Link
                 key={l.href}
