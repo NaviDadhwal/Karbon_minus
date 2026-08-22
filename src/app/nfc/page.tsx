@@ -10,7 +10,7 @@ import {
   Smartphone,
   Sparkles,
 } from "lucide-react";
-import { DEMO_NFC_BATCHES } from "@/lib/nfc";
+import { DEMO_LOTS } from "@/lib/nfc";
 import { Nav } from "@/components/Nav";
 
 export default function NfcHubPage() {
@@ -72,49 +72,51 @@ export default function NfcHubPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {Object.values(DEMO_NFC_BATCHES).map((b) => (
+            {Object.values(DEMO_LOTS).map((lot) => (
               <Link
-                key={b.tagId}
-                href={`/nfc/${b.tagId}`}
+                key={lot.tagId}
+                href={`/nfc/${lot.tagId}`}
                 className="glass-panel p-5 rounded-2xl hover:border-accent/50 transition duration-300 group flex flex-col justify-between"
               >
                 <div>
                   <div className="flex justify-between items-start mb-3">
                     <span className="font-mono text-xs font-bold text-accent bg-accent/15 px-2.5 py-1 rounded-lg border border-accent/30">
-                      #{b.tagId}
+                      #{lot.tagId}
                     </span>
                     <span className="text-[10px] font-bold uppercase text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full">
-                      {b.greenGrade} Grade
+                      {lot.greenGrade} Grade
                     </span>
                   </div>
 
                   <h3 className="font-bold text-white group-hover:text-accent transition leading-snug">
-                    {b.materialName}
+                    {lot.consignmentTitle}
                   </h3>
-                  <p className="text-xs text-[var(--muted-foreground)] mt-1">{b.manufacturer}</p>
+                  <p className="text-xs text-[var(--muted-foreground)] mt-1">
+                    {lot.items.length} materials &bull; {lot.targetProject}
+                  </p>
 
                   <div className="mt-4 pt-3 border-t border-white/10 space-y-1.5 text-xs">
                     <div className="flex justify-between text-[var(--muted-foreground)]">
-                      <span>Embodied Carbon:</span>
+                      <span>Total Lot Carbon:</span>
                       <span className="font-bold text-white">
-                        {b.embodiedCarbon} kg CO₂e/{b.unit}
+                        {lot.totalEmbodiedCarbon.toLocaleString()} kg CO₂e
                       </span>
                     </div>
                     <div className="flex justify-between text-accent font-medium">
                       <span>Carbon Saved:</span>
                       <span>
-                        -{b.carbonSavedPerUnit} kg ({b.carbonReductionPercent}%)
+                        -{lot.totalCarbonSaved.toLocaleString()} kg ({lot.carbonReductionPercent.toFixed(1)}%)
                       </span>
                     </div>
                     <div className="flex justify-between text-[var(--muted-foreground)]">
-                      <span>Cost:</span>
-                      <span>₹{b.unitPrice.toLocaleString()}/{b.unit}</span>
+                      <span>Lot Cost:</span>
+                      <span>₹{lot.totalCost.toLocaleString()}</span>
                     </div>
                   </div>
                 </div>
 
                 <div className="mt-4 pt-3 border-t border-white/5 flex items-center justify-between text-xs font-semibold text-accent group-hover:translate-x-1 transition duration-200">
-                  <span>Open Verification Card</span>
+                  <span>Open Lot Passport</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </div>
               </Link>
