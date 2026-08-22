@@ -16,6 +16,7 @@ import {
 import { getLotOrBatch } from "@/lib/nfc";
 import { Nav } from "@/components/Nav";
 import { notifySuccess } from "@/lib/toast";
+import { AvailabilityBadge } from "@/components/ui/AvailabilityBadge";
 
 export default function SupplierNfcPage() {
   const params = useParams();
@@ -122,7 +123,10 @@ export default function SupplierNfcPage() {
                   className="flex flex-wrap items-center justify-between gap-3 bg-black/25 p-3.5 rounded-xl border border-white/5"
                 >
                   <div>
-                    <span className="font-bold text-white text-sm block">{item.materialName}</span>
+                    <div className="flex items-center gap-2">
+                      <span className="font-bold text-white text-sm block">{item.materialName}</span>
+                      <AvailabilityBadge materialName={item.materialName} />
+                    </div>
                     <span className="text-xs text-[var(--muted-foreground)]">
                       {item.manufacturer} &bull; Dispatch Qty: <strong>{item.quantity} {item.unit}</strong>
                     </span>

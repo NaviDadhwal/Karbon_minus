@@ -15,6 +15,7 @@ import {
 import { getLotOrBatch } from "@/lib/nfc";
 import { Nav } from "@/components/Nav";
 import { notifySuccess } from "@/lib/toast";
+import { AvailabilityBadge } from "@/components/ui/AvailabilityBadge";
 
 export default function ClientNfcPage() {
   const params = useParams();
@@ -203,6 +204,7 @@ export default function ClientNfcPage() {
                             EPD VERIFIED
                           </span>
                         )}
+                        <AvailabilityBadge materialName={item.materialName} />
                       </div>
                       <p className="text-xs text-[var(--muted-foreground)]">
                         {item.manufacturer} &bull; Quantity: <strong>{item.quantity} {item.unit}</strong>

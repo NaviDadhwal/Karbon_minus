@@ -10,6 +10,7 @@ import { useProject } from "@/context/ProjectContext";
 import { notifyError, notifySuccess } from "@/lib/toast";
 import { cn, formatInr, formatKgCo2e } from "@/lib/utils";
 import type { NegotiationBrief, OptimizationResult } from "@/types";
+import { AvailabilityBadge } from "@/components/ui/AvailabilityBadge";
 
 export default function OptimizePage() {
   const params = useParams();
@@ -184,7 +185,7 @@ export default function OptimizePage() {
                   <p className="mt-1 text-sm text-muted">
                     Totals for this supplier mix across your lines
                   </p>
-                  <div className="mt-3 flex flex-wrap gap-6 text-sm">
+                  <div className="mt-3 flex flex-wrap items-center gap-6 text-sm">
                     <div>
                       <span className="text-subtle">Price </span>
                       <span className="font-medium text-foreground">
@@ -197,18 +198,30 @@ export default function OptimizePage() {
                         {formatKgCo2e(selectedCombination.totalCarbon)}
                       </span>
                     </div>
+                    <div>
+                      <span className="text-subtle mr-1.5">Supply Risk </span>
+                      <AvailabilityBadge
+                        availability={selectedCombination.overallAvailability}
+                      />
+                    </div>
                   </div>
                   <ul className="mt-4 space-y-2 text-sm text-muted">
                     {selectedCombination.selections.map((s) => (
                       <li
                         key={`${s.materialId}-${s.supplierId}`}
-                        className="flex flex-wrap gap-x-2 border-b border-border py-2 last:border-0"
+                        className="flex flex-wrap items-center justify-between gap-2 border-b border-border py-2 last:border-0"
                       >
-                        <span className="font-medium text-foreground">
-                          {labelForMaterial(s.materialId)}
-                        </span>
-                        <span className="text-subtle">→</span>
-                        <span>{s.supplierName}</span>
+                        <div className="flex items-center gap-2">
+                          <span className="font-medium text-foreground">
+                            {labelForMaterial(s.materialId)}
+                          </span>
+                          <span className="text-subtle">→</span>
+                          <span>{s.supplierName}</span>
+                        </div>
+                        <AvailabilityBadge
+                          materialName={labelForMaterial(s.materialId)}
+                          availability={s.availability}
+                        />
                       </li>
                     ))}
                   </ul>

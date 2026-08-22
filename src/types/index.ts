@@ -47,6 +47,8 @@ export interface Project {
   updatedAt: string;
 }
 
+export type ProductAvailability = "High" | "Medium" | "Low";
+
 export interface ProjectMaterial {
   id: string;
   materialId: string;
@@ -61,6 +63,7 @@ export interface ProjectMaterial {
   isEstimated: boolean;
   totalCost: number;
   totalCarbon: number;
+  availability?: ProductAvailability;
 }
 
 export interface MaterialCombination {
@@ -72,6 +75,7 @@ export interface MaterialCombination {
     quantity: number;
     cost: number;
     carbon: number;
+    availability?: ProductAvailability;
   }>;
   totalCost: number;
   totalCarbon: number;
@@ -79,6 +83,8 @@ export interface MaterialCombination {
   isOnParetoFrontier: boolean;
   costSavings: number;
   carbonSavings: number;
+  overallAvailability?: ProductAvailability;
+  availabilityScore?: number;
 }
 
 export interface OptimizationResult {

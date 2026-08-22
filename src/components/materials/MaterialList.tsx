@@ -2,6 +2,7 @@
 
 import type { ProjectMaterial } from "@/types";
 import { Button } from "@/components/ui/Button";
+import { AvailabilityBadge } from "@/components/ui/AvailabilityBadge";
 
 export function MaterialList({
   materials,
@@ -24,7 +25,13 @@ export function MaterialList({
           className="flex flex-wrap items-center justify-between gap-2 py-3 text-sm"
         >
           <div>
-            <div className="font-medium text-foreground">{m.materialName}</div>
+            <div className="flex items-center gap-2">
+              <span className="font-medium text-foreground">{m.materialName}</span>
+              <AvailabilityBadge
+                materialName={m.materialName}
+                availability={m.availability}
+              />
+            </div>
             <div className="text-xs text-subtle">
               {m.supplierName} · {m.unitPrice} INR / {m.unit}
             </div>

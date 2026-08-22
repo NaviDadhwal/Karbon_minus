@@ -1,4 +1,5 @@
 import type { MaterialEntry, ProjectMaterial, SupplierOption } from "@/types";
+import { getAvailabilityForMaterial } from "@/lib/availability";
 
 function effectiveCarbon(s: SupplierOption): {
   value: number;
@@ -22,6 +23,8 @@ export function buildProjectMaterial(
   const { value: embodiedCarbon, isEstimated } = effectiveCarbon(supplier);
   const totalCost = quantity * supplier.unitPrice;
   const totalCarbon = quantity * embodiedCarbon;
+  const availability = getAvailabilityForMaterial(material.name).availability;
+
   return {
     id: lineId ?? crypto.randomUUID(),
     materialId: material.id,
@@ -36,5 +39,6 @@ export function buildProjectMaterial(
     isEstimated,
     totalCost,
     totalCarbon,
+    availability,
   };
 }

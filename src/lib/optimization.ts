@@ -3,7 +3,9 @@ import type {
   MaterialEntry,
   OptimizationResult,
   ProjectMaterial,
+  ProductAvailability,
 } from "@/types";
+import { getAvailabilityForMaterial, getAvailabilityBadgeProps } from "@/lib/availability";
 
 function dominates(
   a: { totalCost: number; totalCarbon: number },
@@ -73,6 +75,8 @@ export function runOptimization(input: OptimizeInput): OptimizationResult {
       isOnParetoFrontier: true,
       costSavings: 0,
       carbonSavings: 0,
+      overallAvailability: "High",
+      availabilityScore: 1.0,
     };
     return {
       combinations: [empty],
@@ -105,11 +109,17 @@ export function runOptimization(input: OptimizeInput): OptimizationResult {
     const selections: MaterialCombination["selections"] = [];
     let totalCost = 0;
     let totalCarbon = 0;
+    let totalAvailScore = 0;
+
     idx.forEach((supplierIndex, lineIdx) => {
       const { material, quantity } = lineItems[lineIdx];
       const s = material.suppliers[supplierIndex];
       const cost = quantity * s.unitPrice;
       const carbon = quantity * (s.estimatedCarbon?.value ?? s.embodiedCarbon);
+      const avail = getAvailabilityForMaterial(material.name).availability;
+      const score = getAvailabilityBadgeProps(avail).score;
+      totalAvailScore += score;
+
       selections.push({
         materialId: material.id,
         supplierId: s.id,
@@ -117,10 +127,17 @@ export function runOptimization(input: OptimizeInput): OptimizationResult {
         quantity,
         cost,
         carbon,
+        availability: avail,
       });
       totalCost += cost;
       totalCarbon += carbon;
     });
+
+    const avgAvailScore =
+      lineItems.length > 0 ? totalAvailScore / lineItems.length : 1.0;
+    const overallAvailability: ProductAvailability =
+      avgAvailScore >= 0.8 ? "High" : avgAvailScore >= 0.5 ? "Medium" : "Low";
+
     return {
       id: idx.join("-"),
       selections,
@@ -130,6 +147,8 @@ export function runOptimization(input: OptimizeInput): OptimizationResult {
       isOnParetoFrontier: false,
       costSavings: 0,
       carbonSavings: 0,
+      overallAvailability,
+      availabilityScore: avgAvailScore,
     };
   };
 
