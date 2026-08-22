@@ -121,6 +121,9 @@ export interface AlternativeSuggestion {
   costDifference: number;
   costDifferencePercent: number;
   explanation: string;
+  alternativeAvailability?: ProductAvailability;
+  currentRiskScore?: number;
+  alternativeRiskScore?: number;
 }
 
 export interface ProcurementReport {

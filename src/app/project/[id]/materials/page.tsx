@@ -15,6 +15,7 @@ import { DEFAULT_STARTER_MATERIALS } from "@/lib/default-starter-materials";
 import { notifyError, notifyInfo, notifySuccess } from "@/lib/toast";
 import { formatInr, formatKgCo2e } from "@/lib/utils";
 import { buildProjectMaterial } from "@/lib/materials";
+import { AvailabilityBadge } from "@/components/ui/AvailabilityBadge";
 import type { AlternativeSuggestion, MaterialEntry } from "@/types";
 
 export default function MaterialsPage() {
@@ -208,9 +209,11 @@ export default function MaterialsPage() {
                 key={m.id}
                 className="flex flex-wrap items-center justify-between gap-3 border-b border-divide py-2 text-foreground"
               >
-                <span className="min-w-0 flex-1">
-                  {m.name} <span className="text-subtle">({m.category})</span>
-                </span>
+                <div className="min-w-0 flex-1 flex flex-wrap items-center gap-2">
+                  <span className="font-medium">{m.name}</span>
+                  <span className="text-xs text-subtle">({m.category})</span>
+                  <AvailabilityBadge materialName={m.name} showRiskScore size="sm" />
+                </div>
                 <div className="flex flex-wrap items-end gap-2">
                   <label className="flex flex-col gap-0.5">
                     <span className="text-xs text-muted">
@@ -289,13 +292,12 @@ export default function MaterialsPage() {
             qty edits do not reload the list). Use refresh to recalculate after
             quantity changes.
           </p>
-          <div className="mt-3 flex flex-wrap gap-2">
+          <div className="mt-4 flex flex-wrap items-center gap-3">
             <Button
               type="button"
               variant="secondary"
               disabled={altLoading || materials.length === 0}
               onClick={() => {
-                if (materials.length === 0) return;
                 setAltLoading(true);
                 void fetch("/api/ai/alternatives", {
                   method: "POST",
@@ -329,11 +331,18 @@ export default function MaterialsPage() {
                     key={line.id}
                     className="border-b border-divide pb-6 last:border-0"
                   >
-                    <div className="font-medium text-foreground">
-                      {line.materialName}{" "}
-                      <span className="text-sm font-normal text-muted">
-                        ({line.quantity} {line.unit})
-                      </span>
+                    <div className="flex flex-wrap items-center justify-between gap-2 font-medium text-foreground">
+                      <div className="flex items-center gap-2">
+                        <span>{line.materialName}</span>
+                        <span className="text-sm font-normal text-muted">
+                          ({line.quantity} {line.unit})
+                        </span>
+                      </div>
+                      <AvailabilityBadge
+                        materialName={line.materialName}
+                        showRiskScore
+                        size="sm"
+                      />
                     </div>
                     {row.length === 0 ? (
                       <p className="mt-2 text-sm text-muted">
@@ -353,11 +362,20 @@ export default function MaterialsPage() {
                                   : "border-border bg-card/50"
                               }`}
                             >
-                              <div className="flex flex-wrap gap-x-4 gap-y-1 text-muted">
-                                <span>
-                                  → {a.alternative.name} ·{" "}
-                                  {a.alternativeSupplier.name}
-                                </span>
+                              <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
+                                <div className="flex items-center gap-2 font-semibold text-foreground">
+                                  <span>→ {a.alternative.name}</span>
+                                  <span className="text-xs font-normal text-muted">
+                                    · {a.alternativeSupplier.name}
+                                  </span>
+                                </div>
+                                <AvailabilityBadge
+                                  materialName={a.alternative.name}
+                                  showRiskScore
+                                  size="sm"
+                                />
+                              </div>
+                              <div className="flex flex-wrap gap-x-4 gap-y-1 text-muted text-xs sm:text-sm">
                                 <span className="text-emerald-700 dark:text-emerald-300">
                                   Δ carbon {formatKgCo2e(a.carbonSavings)} (
                                   {a.carbonSavingsPercent.toFixed(1)}%)
@@ -372,6 +390,17 @@ export default function MaterialsPage() {
                                   Δ cost {formatInr(a.costDifference)} (
                                   {a.costDifferencePercent.toFixed(1)}%)
                                 </span>
+                                {a.currentRiskScore !== undefined && a.alternativeRiskScore !== undefined && (
+                                  <span
+                                    className={
+                                      a.alternativeRiskScore <= a.currentRiskScore
+                                        ? "text-emerald-600 dark:text-emerald-400 font-mono"
+                                        : "text-amber-600 dark:text-amber-400 font-mono"
+                                    }
+                                  >
+                                    Δ shortage risk: {a.alternativeRiskScore - a.currentRiskScore > 0 ? `+${a.alternativeRiskScore - a.currentRiskScore}` : a.alternativeRiskScore - a.currentRiskScore} pts ({a.currentRiskScore} → {a.alternativeRiskScore})
+                                  </span>
+                                )}
                               </div>
                               <p className="mt-2 text-label">{a.explanation}</p>
                               {applied ? (

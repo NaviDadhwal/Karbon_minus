@@ -221,6 +221,7 @@ export default function OptimizePage() {
                         <AvailabilityBadge
                           materialName={labelForMaterial(s.materialId)}
                           availability={s.availability}
+                          showRiskScore
                         />
                       </li>
                     ))}

@@ -30,6 +30,7 @@ export function MaterialList({
               <AvailabilityBadge
                 materialName={m.materialName}
                 availability={m.availability}
+                showRiskScore
               />
             </div>
             <div className="text-xs text-subtle">

@@ -682,3 +682,52 @@ export function getAvailabilityBadgeProps(availability: ProductAvailability) {
       };
   }
 }
+
+export function getSemiconductorRisk(nameOrId: string) {
+  const data = getAvailabilityForMaterial(nameOrId);
+  let score = 50;
+  let level = "Medium Risk";
+  let bgClass = "bg-amber-500/15 text-amber-400 border-amber-500/30";
+  let dotColor = "bg-amber-400";
+
+  switch (data.shortageImpact) {
+    case "High":
+      score = 85;
+      level = "High Shortage Risk";
+      bgClass = "bg-rose-500/15 text-rose-400 border-rose-500/30";
+      dotColor = "bg-rose-400";
+      break;
+    case "Medium–High":
+      score = 65;
+      level = "Med-High Risk";
+      bgClass = "bg-amber-500/15 text-amber-400 border-amber-500/30";
+      dotColor = "bg-amber-400";
+      break;
+    case "Medium":
+      score = 50;
+      level = "Medium Risk";
+      bgClass = "bg-amber-500/15 text-amber-400 border-amber-500/30";
+      dotColor = "bg-amber-400";
+      break;
+    case "Low–Medium":
+      score = 30;
+      level = "Low Risk";
+      bgClass = "bg-emerald-500/15 text-emerald-400 border-emerald-500/30";
+      dotColor = "bg-emerald-400";
+      break;
+    case "Low":
+      score = 15;
+      level = "Low Risk";
+      bgClass = "bg-emerald-500/15 text-emerald-400 border-emerald-500/30";
+      dotColor = "bg-emerald-400";
+      break;
+  }
+
+  return {
+    ...data,
+    riskScore: score,
+    riskLevel: level,
+    bgClass,
+    dotColor,
+  };
+}

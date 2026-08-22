@@ -5,6 +5,7 @@ import type { MaterialEntry } from "@/types";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { buildProjectMaterial } from "@/lib/materials";
+import { AvailabilityBadge } from "@/components/ui/AvailabilityBadge";
 
 export function MaterialInput({
   onAdd,
@@ -96,8 +97,14 @@ export function MaterialInput({
                     setSupplierId(m.material.suppliers[0]?.id ?? "");
                   }}
                 >
-                  <div className="font-medium">{m.material.name}</div>
-                  <div className="text-xs text-muted">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <span className="font-medium">{m.material.name}</span>
+                    <AvailabilityBadge
+                      materialName={m.material.name}
+                      showRiskScore
+                    />
+                  </div>
+                  <div className="text-xs text-muted mt-1">
                     {(m.confidenceScore * 100).toFixed(0)}% — {m.matchReason}
                   </div>
                 </button>
@@ -109,7 +116,14 @@ export function MaterialInput({
 
       {picked && (
         <div className="rounded-lg border border-accent-border bg-accent-surface p-4">
-          <div className="font-medium text-foreground">{picked.name}</div>
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <span className="font-medium text-foreground">{picked.name}</span>
+            <AvailabilityBadge
+              materialName={picked.name}
+              showRiskScore
+              size="md"
+            />
+          </div>
           <div className="mt-3 grid gap-2 sm:grid-cols-2">
             <div>
               <label className="text-xs text-muted">

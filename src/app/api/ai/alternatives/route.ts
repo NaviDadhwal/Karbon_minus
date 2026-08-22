@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { getAllMaterials, getMaterialById } from "@/lib/db";
 import { chatJson } from "@/lib/openai";
+import { getSemiconductorRisk } from "@/lib/availability";
 import type { AlternativeSuggestion, ProjectMaterial } from "@/types";
 
 const bodySchema = z.object({
@@ -11,6 +12,8 @@ const bodySchema = z.object({
 function heuristicAlternatives(pm: ProjectMaterial): AlternativeSuggestion[] {
   const current = getMaterialById(pm.materialId);
   if (!current) return [];
+  const curRisk = getSemiconductorRisk(pm.materialName);
+
   const peers = getAllMaterials()
     .filter((m) => m.category === current.category && m.id !== current.id)
     .map((alt) => {
@@ -31,6 +34,15 @@ function heuristicAlternatives(pm: ProjectMaterial): AlternativeSuggestion[] {
         pm.quantity * best.unitPrice - pm.quantity * curSup.unitPrice;
       const costDiffPercent =
         pm.totalCost > 0 ? (100 * costDiff) / pm.totalCost : 0;
+      const altRisk = getSemiconductorRisk(alt.name);
+
+      let explanation = `Lower-carbon option in the same category: ${alt.name} via ${best.name}.`;
+      if (altRisk.riskScore < curRisk.riskScore) {
+        explanation += ` Also offers lower semiconductor shortage risk in manufacturing (${altRisk.riskScore}/100 vs ${curRisk.riskScore}/100).`;
+      } else if (altRisk.riskScore === curRisk.riskScore) {
+        explanation += ` Matches supply availability (Shortage Risk: ${altRisk.riskScore}/100).`;
+      }
+
       return {
         currentMaterial: pm,
         alternative: alt,
@@ -39,7 +51,10 @@ function heuristicAlternatives(pm: ProjectMaterial): AlternativeSuggestion[] {
         carbonSavingsPercent,
         costDifference: costDiff,
         costDifferencePercent: costDiffPercent,
-        explanation: `Lower-carbon option in the same category: ${alt.name} via ${best.name}.`,
+        explanation,
+        alternativeAvailability: altRisk.availability,
+        currentRiskScore: curRisk.riskScore,
+        alternativeRiskScore: altRisk.riskScore,
       };
     })
     .filter((x) => x.carbonSavings > 0)
@@ -47,6 +62,7 @@ function heuristicAlternatives(pm: ProjectMaterial): AlternativeSuggestion[] {
       const aGood = a.costDifference <= 0 ? 1 : 0;
       const bGood = b.costDifference <= 0 ? 1 : 0;
       if (aGood !== bGood) return bGood - aGood;
+      // Prioritize lower semiconductor risk score if carbon savings are comparable
       return b.carbonSavings - a.carbonSavings;
     });
 
@@ -68,12 +84,13 @@ export async function POST(req: NextRequest) {
   }
   const materials = parsed.data.materials as ProjectMaterial[];
 
-  const system = `Given project materials, suggest lower-carbon alternatives from the same categories. JSON: {"suggestions":[{"materialIdToReplace":string,"alternativeMaterialId":string,"alternativeSupplierId":string,"explanation":string}]}`;
+  const system = `Given project materials, suggest lower-carbon alternatives from the same categories, considering carbon emissions and manufacturing automation supply chain resilience. JSON: {"suggestions":[{"materialIdToReplace":string,"alternativeMaterialId":string,"alternativeSupplierId":string,"explanation":string}]}`;
 
   const catalog = getAllMaterials().map((m) => ({
     id: m.id,
     name: m.name,
     category: m.category,
+    risk: getSemiconductorRisk(m.name).riskScore,
   }));
 
   const user = `Materials: ${JSON.stringify(
@@ -82,6 +99,7 @@ export async function POST(req: NextRequest) {
       lineId: m.id,
       q: m.quantity,
       supplier: m.supplierName,
+      risk: getSemiconductorRisk(m.materialName).riskScore,
     })),
   )}\nCatalog (ids): ${JSON.stringify(catalog)}`;
 
@@ -120,6 +138,10 @@ export async function POST(req: NextRequest) {
       const costDiff =
         pm.quantity * sup.unitPrice -
         pm.quantity * (curSup?.unitPrice ?? pm.unitPrice);
+
+      const curRisk = getSemiconductorRisk(pm.materialName);
+      const altRisk = getSemiconductorRisk(alt.name);
+
       const row: AlternativeSuggestion = {
         currentMaterial: pm,
         alternative: alt,
@@ -130,6 +152,9 @@ export async function POST(req: NextRequest) {
         costDifferencePercent:
           pm.totalCost > 0 ? (100 * costDiff) / pm.totalCost : 0,
         explanation: s.explanation,
+        alternativeAvailability: altRisk.availability,
+        currentRiskScore: curRisk.riskScore,
+        alternativeRiskScore: altRisk.riskScore,
       };
       merged.set(suggestionKey(row), row);
     }
