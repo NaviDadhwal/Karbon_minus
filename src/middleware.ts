@@ -3,11 +3,13 @@ import { NextResponse } from "next/server";
 
 const isPublicRoute = createRouteMatcher([
   "/",
+  "/pricing(.*)",
+  "/projects(.*)",
+  "/project(.*)",
   "/sign-in(.*)",
   "/sign-up(.*)",
   "/nfc(.*)",
-  "/api/demo(.*)",
-  "/api/materials(.*)",
+  "/api(.*)",
 ]);
 
 const hasClerk = Boolean(
