@@ -70,11 +70,11 @@ export function saveActiveProjectId(id: string | null): void {
   else localStorage.setItem(ACTIVE_KEY, id);
 }
 
-const SUBSCRIPTION_KEY = "ecn_subscription_state";
+const SUBSCRIPTION_KEY = "ecn_subscription_state_v3";
 
 export const DEFAULT_SUBSCRIPTION_STATE: import("@/types").UserSubscriptionState = {
   tier: "free",
-  creditsRemaining: 1, // 1 Free report credit for all users on onboarding
+  creditsRemaining: 0, // Reset: 0 credits by default for all users
   unlockedProjectIds: [],
   totalReportsGenerated: 0,
 };
@@ -87,10 +87,11 @@ export function loadSubscriptionState(): import("@/types").UserSubscriptionState
     const parsed = JSON.parse(raw);
     return {
       tier: parsed.tier ?? "free",
-      creditsRemaining: typeof parsed.creditsRemaining === "number" ? parsed.creditsRemaining : 1,
+      creditsRemaining: typeof parsed.creditsRemaining === "number" ? parsed.creditsRemaining : 0,
       unlockedProjectIds: Array.isArray(parsed.unlockedProjectIds) ? parsed.unlockedProjectIds : [],
       totalReportsGenerated: typeof parsed.totalReportsGenerated === "number" ? parsed.totalReportsGenerated : 0,
       subscriptionExpiresAt: parsed.subscriptionExpiresAt,
+      vipPassKey: parsed.vipPassKey,
     };
   } catch {
     return DEFAULT_SUBSCRIPTION_STATE;
@@ -107,4 +108,5 @@ export function saveSubscriptionState(state: import("@/types").UserSubscriptionS
     return false;
   }
 }
+
 

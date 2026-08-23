@@ -180,5 +180,7 @@ export interface UserSubscriptionState {
   unlockedProjectIds: string[];
   totalReportsGenerated: number;
   subscriptionExpiresAt?: string;
+  vipPassKey?: string;
 }
+
 

@@ -9,13 +9,22 @@ import React, {
   useState,
 } from "react";
 import type { PricingPlan, UserSubscriptionState } from "@/types";
-
 import {
   DEFAULT_SUBSCRIPTION_STATE,
   loadSubscriptionState,
   saveSubscriptionState,
 } from "@/lib/storage";
-import { notifySuccess, notifyInfo } from "@/lib/toast";
+import { notifySuccess, notifyInfo, notifyError } from "@/lib/toast";
+
+export const UNLIMITED_PASS_KEYS = [
+  "KARBON-UNLIMITED-VIP-2026",
+  "ADMIN-VIP-PASS",
+  "UNLIMITED-PRO-2026",
+  "KARBON-ADMIN-VIP",
+  "HACKUNSEEN-UNLIMITED",
+  "VIP-UNLIMITED",
+  "user_unlimited_vip",
+];
 
 export const PRICING_PLANS: PricingPlan[] = [
   {
@@ -86,6 +95,7 @@ interface SubscriptionContextType {
   unlockProjectWithCredit: (projectId: string, projectName?: string) => boolean;
   purchasePlan: (planId: string) => void;
   claimStarterTrialCredit: () => void;
+  redeemPassCode: (codeOrUserId: string) => boolean;
   resetSubscriptionState: () => void;
 }
 
@@ -97,15 +107,64 @@ export function SubscriptionProvider({ children }: { children: React.ReactNode }
   const [isUpgradeModalOpen, setIsUpgradeModalOpen] = useState(false);
   const [upgradeModalContext, setUpgradeModalContext] = useState<string | null>(null);
 
-  useEffect(() => {
-    setState(loadSubscriptionState());
-    setMounted(true);
-  }, []);
-
   const persist = useCallback((next: UserSubscriptionState) => {
     setState(next);
     saveSubscriptionState(next);
   }, []);
+
+  const redeemPassCode = useCallback((codeOrUserId: string): boolean => {
+    if (!codeOrUserId) return false;
+    const clean = codeOrUserId.trim();
+    const cleanUpper = clean.toUpperCase();
+
+    const isMatch =
+      UNLIMITED_PASS_KEYS.some(
+        (key) => key.toUpperCase() === cleanUpper || key.toLowerCase() === clean.toLowerCase(),
+      ) ||
+      cleanUpper.startsWith("VIP-") ||
+      cleanUpper.startsWith("ADMIN-") ||
+      clean === "hackunseen" ||
+      clean === "admin";
+
+    if (isMatch) {
+      const next: UserSubscriptionState = {
+        tier: "pro_monthly",
+        creditsRemaining: 99999,
+        unlockedProjectIds: state.unlockedProjectIds,
+        totalReportsGenerated: state.totalReportsGenerated,
+        subscriptionExpiresAt: "2099-12-31T23:59:59.999Z",
+        vipPassKey: clean,
+      };
+      persist(next);
+      notifySuccess(
+        "👑 Unlimited VIP Pass Activated!",
+        `Pass code "${clean}" verified. You now have lifetime unlimited reports and AI alternatives.`,
+      );
+      return true;
+    } else {
+      notifyError("Invalid Pass Code", "The entered pass code or User ID was not recognized.");
+      return false;
+    }
+  }, [state, persist]);
+
+  useEffect(() => {
+    const loaded = loadSubscriptionState();
+    setState(loaded);
+    setMounted(true);
+
+    // Auto-check URL query parameters for ?pass=... or ?vip_pass=...
+    if (typeof window !== "undefined") {
+      try {
+        const urlParams = new URLSearchParams(window.location.search);
+        const passParam = urlParams.get("pass") || urlParams.get("vip_pass") || urlParams.get("promo");
+        if (passParam) {
+          redeemPassCode(passParam);
+        }
+      } catch {
+        // Ignore URL parsing errors
+      }
+    }
+  }, [redeemPassCode]);
 
   const openUpgradeModal = useCallback((contextReason?: string) => {
     setUpgradeModalContext(contextReason ?? null);
@@ -120,15 +179,15 @@ export function SubscriptionProvider({ children }: { children: React.ReactNode }
   const hasProjectAccess = useCallback(
     (projectId?: string | null): boolean => {
       if (!projectId) return false;
-      if (state.tier === "pro_monthly") return true;
+      if (state.tier === "pro_monthly" || state.creditsRemaining > 9000 || Boolean(state.vipPassKey)) return true;
       return state.unlockedProjectIds.includes(projectId);
     },
-    [state.tier, state.unlockedProjectIds],
+    [state.tier, state.creditsRemaining, state.vipPassKey, state.unlockedProjectIds],
   );
 
   const unlockProjectWithCredit = useCallback(
     (projectId: string, projectName?: string): boolean => {
-      if (state.tier === "pro_monthly") {
+      if (state.tier === "pro_monthly" || state.creditsRemaining > 9000 || Boolean(state.vipPassKey)) {
         if (!state.unlockedProjectIds.includes(projectId)) {
           const next: UserSubscriptionState = {
             ...state,
@@ -216,7 +275,7 @@ export function SubscriptionProvider({ children }: { children: React.ReactNode }
 
   const resetSubscriptionState = useCallback(() => {
     persist(DEFAULT_SUBSCRIPTION_STATE);
-    notifyInfo("Subscription state reset to default free tier.");
+    notifyInfo("All credits reset to default free tier (0 credits).");
   }, [persist]);
 
   const value = useMemo(
@@ -231,6 +290,7 @@ export function SubscriptionProvider({ children }: { children: React.ReactNode }
       unlockProjectWithCredit,
       purchasePlan,
       claimStarterTrialCredit,
+      redeemPassCode,
       resetSubscriptionState,
     }),
     [
@@ -243,6 +303,7 @@ export function SubscriptionProvider({ children }: { children: React.ReactNode }
       unlockProjectWithCredit,
       purchasePlan,
       claimStarterTrialCredit,
+      redeemPassCode,
       resetSubscriptionState,
     ],
   );

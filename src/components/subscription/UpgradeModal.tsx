@@ -6,10 +6,11 @@ import {
   X,
   Check,
   Zap,
-  Sparkles,
-  ArrowRight,
   HelpCircle,
+  KeyRound,
+  Crown,
 } from "lucide-react";
+
 
 import { useSubscription } from "@/context/SubscriptionContext";
 import { useProject } from "@/context/ProjectContext";
@@ -20,109 +21,114 @@ export function UpgradeModal() {
     isUpgradeModalOpen,
     closeUpgradeModal,
     upgradeModalContext,
-    state,
     plans,
-    purchasePlan,
+    state,
     unlockProjectWithCredit,
+    purchasePlan,
     claimStarterTrialCredit,
+    redeemPassCode,
   } = useSubscription();
 
   const { project } = useProject();
   const [selectedPlanId, setSelectedPlanId] = useState<string>("growth_5_pack");
   const [isProcessing, setIsProcessing] = useState(false);
+  const [promoInput, setPromoInput] = useState("");
+  const [showPromoBox, setShowPromoBox] = useState(false);
 
   if (!isUpgradeModalOpen) return null;
 
-  const isPro = state.tier === "pro_monthly";
-  const hasCredits = state.creditsRemaining > 0;
-  const isCurrentProjectUnlocked = project ? state.unlockedProjectIds.includes(project.id) || isPro : false;
-
   const handleCheckout = (planId: string) => {
     setIsProcessing(true);
+    setSelectedPlanId(planId);
+
+    // Simulate instant checkout / payment gateway transition
     setTimeout(() => {
       purchasePlan(planId);
       setIsProcessing(false);
     }, 600);
   };
 
-  const handleUnlockCurrentProject = () => {
-    if (!project) return;
-    const ok = unlockProjectWithCredit(project.id, project.name);
-    if (ok) {
-      closeUpgradeModal();
+  const handleRedeem = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!promoInput.trim()) return;
+    const success = redeemPassCode(promoInput.trim());
+    if (success) {
+      setPromoInput("");
+      setShowPromoBox(false);
     }
   };
 
+  const isUnlimited = state.tier === "pro_monthly" || state.creditsRemaining > 9000 || Boolean(state.vipPassKey);
+
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md animate-fadeIn"
-      role="dialog"
-      aria-modal="true"
-    >
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
       <div
-        className="relative w-full max-w-4xl max-h-[92vh] overflow-y-auto rounded-3xl border border-accent/30 bg-[var(--background)] shadow-2xl p-6 sm:p-8 backdrop-blur-xl"
+        className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-3xl border border-accent/30 bg-[#0c1319]/95 p-6 sm:p-8 shadow-2xl shadow-accent/10"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Close Button */}
+        {/* Close button */}
         <button
+          type="button"
           onClick={closeUpgradeModal}
-          className="absolute top-5 right-5 p-2 rounded-xl text-muted hover:text-foreground hover:bg-white/10 transition"
-          aria-label="Close"
+          className="absolute top-5 right-5 p-2 rounded-full bg-white/5 hover:bg-white/10 text-muted hover:text-foreground transition"
         >
           <X className="w-5 h-5" />
         </button>
 
         {/* Modal Header */}
         <div className="text-center max-w-xl mx-auto">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/15 border border-accent/30 text-accent text-xs font-semibold uppercase tracking-wider mb-3">
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>Monetization & Report Credits</span>
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/10 border border-accent/30 text-accent text-xs font-semibold mb-3">
+            <Zap className="w-3.5 h-3.5 fill-accent" />
+            <span>Pay-Per-Report & Pro Model</span>
           </div>
 
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
             Unlock Full Carbon Intelligence
           </h2>
 
           <p className="mt-2 text-sm text-muted">
             {upgradeModalContext ||
-              "Material selection and pricing are 100% free. Upgrade to unlock AI Lower-Carbon Swaps and generate official Embodied Carbon Procurement Reports on a per-report basis."}
+              "Unlock AI lower-carbon alternatives, Pareto cost-carbon optimization, and certified PDF/CSV export for your project."}
           </p>
 
-          {/* Current Balance Bar */}
-          <div className="mt-4 inline-flex items-center gap-3 px-4 py-2 rounded-2xl bg-card/80 border border-border text-xs">
+          {/* Current Credit Status */}
+          <div className="mt-4 inline-flex items-center gap-3 px-4 py-2 rounded-2xl bg-white/5 border border-white/10 text-xs">
             <span className="text-muted">Current Balance:</span>
-            <span className="font-mono font-bold text-accent">
-              {isPro
-                ? "Unlimited Pro Pass"
-                : `${state.creditsRemaining} Report ${state.creditsRemaining === 1 ? "Credit" : "Credits"}`}
-            </span>
+            {isUnlimited ? (
+              <span className="font-bold text-amber-300 flex items-center gap-1">
+                <Crown className="w-3.5 h-3.5 text-amber-400" />
+                Unlimited VIP Pro Pass Active
+              </span>
+            ) : (
+              <span className="font-mono font-bold text-accent">
+                {state.creditsRemaining}{" "}
+                {state.creditsRemaining === 1 ? "Report Credit" : "Report Credits"}
+              </span>
+            )}
           </div>
         </div>
 
-        {/* If user already has credits & current project is locked, offer 1-click unlock */}
-        {hasCredits && project && !isCurrentProjectUnlocked && (
-          <div className="mt-6 p-4 rounded-2xl bg-gradient-to-r from-accent/20 via-emerald-500/15 to-transparent border border-accent/40 flex flex-wrap items-center justify-between gap-3 shadow-lg">
-            <div className="flex items-center gap-3">
-              <div className="p-2.5 rounded-xl bg-accent text-black font-bold">
-                <Zap className="w-5 h-5" />
-              </div>
-              <div>
-                <h3 className="text-sm font-bold text-foreground">
-                  You have {state.creditsRemaining} available {state.creditsRemaining === 1 ? "credit" : "credits"}!
-                </h3>
-                <p className="text-xs text-muted">
-                  Use 1 credit now to unlock AI Alternatives & Report generation for &ldquo;{project.name}&rdquo;.
-                </p>
-              </div>
+        {/* 1-Click Instant Unlock Banner if user already has credits and a project */}
+        {project && !isUnlimited && state.creditsRemaining > 0 && (
+          <div className="mt-6 p-4 rounded-2xl border border-accent/50 bg-accent/10 flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <p className="font-semibold text-accent text-sm">
+                Unlock &quot;{project.name}&quot; now
+              </p>
+              <p className="text-xs text-muted">
+                You have {state.creditsRemaining} credit available. Deduct 1 credit to unlock full carbon access for this project.
+              </p>
             </div>
-
             <button
               type="button"
-              onClick={handleUnlockCurrentProject}
-              className="px-5 py-2.5 rounded-xl bg-accent text-black font-bold text-xs hover:opacity-90 transition shadow-md shadow-accent/25 flex items-center gap-1.5"
+              onClick={() => {
+                unlockProjectWithCredit(project.id, project.name);
+                closeUpgradeModal();
+              }}
+              className="px-4 py-2 rounded-xl bg-accent text-black font-bold text-xs hover:opacity-90 transition shadow-lg shadow-accent/20 flex items-center gap-1.5"
             >
-              <span>Unlock Project (1 Credit)</span>
-              <ArrowRight className="w-3.5 h-3.5" />
+              <Zap className="w-3.5 h-3.5 fill-black" />
+              <span>Use 1 Credit to Unlock</span>
             </button>
           </div>
         )}
@@ -131,52 +137,40 @@ export function UpgradeModal() {
         <div className="mt-8 grid gap-4 md:grid-cols-3">
           {plans.map((plan) => {
             const isSelected = selectedPlanId === plan.id;
-
             return (
               <div
                 key={plan.id}
                 onClick={() => setSelectedPlanId(plan.id)}
-                className={`relative flex flex-col justify-between rounded-2xl p-5 border transition-all duration-200 cursor-pointer ${
+                className={`relative flex flex-col justify-between rounded-2xl p-5 border transition-all cursor-pointer ${
                   plan.popular
-                    ? "border-accent bg-accent/10 shadow-[0_0_30px_rgba(23,207,151,0.2)]"
+                    ? "border-accent bg-accent/10 shadow-lg shadow-accent/10 ring-1 ring-accent"
                     : isSelected
-                    ? "border-accent/80 bg-card/90"
-                    : "border-border bg-card/50 hover:border-accent/40"
+                    ? "border-white/40 bg-white/5"
+                    : "border-border bg-card/60 hover:border-white/20"
                 }`}
               >
-                {plan.popular && (
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full bg-accent text-black font-bold text-[10px] uppercase tracking-wider shadow-sm">
+                {plan.badge && (
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-2.5 py-0.5 rounded-full bg-accent text-black text-[10px] font-extrabold uppercase tracking-wider shadow-sm">
                     {plan.badge}
                   </div>
                 )}
 
                 <div>
-                  <div className="flex items-center justify-between gap-2">
-                    <h4 className="font-bold text-base text-foreground">{plan.name}</h4>
-                    {!plan.popular && plan.badge && (
-                      <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-white/10 text-muted">
-                        {plan.badge}
-                      </span>
-                    )}
+                  <h3 className="font-bold text-foreground text-base mt-1">{plan.name}</h3>
+                  <p className="text-xs text-muted mt-1 min-h-[32px]">{plan.description}</p>
+
+                  <div className="mt-4 pb-4 border-b border-white/10">
+                    <span className="text-2xl sm:text-3xl font-extrabold font-mono text-foreground">
+                      {formatInr(plan.priceInr)}
+                    </span>
+                    <span className="text-[11px] text-muted block mt-0.5">
+                      {plan.unitDescription}
+                    </span>
                   </div>
 
-                  <p className="mt-1 text-xs text-muted leading-relaxed min-h-[32px]">
-                    {plan.description}
-                  </p>
-
-                  <div className="mt-4 pb-4 border-b border-border">
-                    <div className="flex items-baseline gap-1">
-                      <span className="text-2xl font-black text-foreground font-mono">
-                        {formatInr(plan.priceInr)}
-                      </span>
-                    </div>
-                    <p className="text-[11px] text-subtle mt-0.5">{plan.unitDescription}</p>
-                  </div>
-
-                  {/* Feature Checklist */}
-                  <ul className="mt-4 space-y-2 text-xs">
+                  <ul className="mt-4 space-y-2 text-xs text-label">
                     {plan.features.map((feature, idx) => (
-                      <li key={idx} className="flex items-start gap-2 text-foreground/90">
+                      <li key={idx} className="flex items-start gap-2">
                         <Check className="w-3.5 h-3.5 text-accent shrink-0 mt-0.5" />
                         <span>{feature}</span>
                       </li>
@@ -184,7 +178,7 @@ export function UpgradeModal() {
                   </ul>
                 </div>
 
-                <div className="mt-6 pt-2">
+                <div className="mt-6">
                   <button
                     type="button"
                     disabled={isProcessing}
@@ -192,20 +186,13 @@ export function UpgradeModal() {
                       e.stopPropagation();
                       handleCheckout(plan.id);
                     }}
-                    className={`w-full py-2.5 rounded-xl font-bold text-xs transition-all shadow-md flex items-center justify-center gap-1.5 ${
+                    className={`w-full py-2.5 rounded-xl font-bold text-xs transition flex items-center justify-center gap-1.5 ${
                       plan.popular
-                        ? "bg-accent text-black hover:opacity-90 shadow-accent/20"
-                        : "bg-white/10 hover:bg-white/20 text-foreground border border-white/15"
+                        ? "bg-accent text-black hover:opacity-90"
+                        : "bg-white/10 hover:bg-white/20 text-white"
                     }`}
                   >
-                    {isProcessing && selectedPlanId === plan.id ? (
-                      <span className="animate-pulse">Processing...</span>
-                    ) : (
-                      <>
-                        <span>{plan.ctaText}</span>
-                        <ArrowRight className="w-3.5 h-3.5" />
-                      </>
-                    )}
+                    {isProcessing && selectedPlanId === plan.id ? "Processing..." : "Select Plan"}
                   </button>
                 </div>
               </div>
@@ -213,8 +200,44 @@ export function UpgradeModal() {
           })}
         </div>
 
+        {/* VIP Passcode / Master ID Activation Box */}
+        <div className="mt-6 p-4 rounded-2xl bg-white/[0.03] border border-white/10">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <button
+              type="button"
+              onClick={() => setShowPromoBox(!showPromoBox)}
+              className="text-xs font-semibold text-amber-300 hover:text-amber-200 flex items-center gap-1.5 transition"
+            >
+              <KeyRound className="w-3.5 h-3.5 text-amber-400" />
+              <span>Have a VIP Passcode or Unlimited User ID?</span>
+            </button>
+            <span className="text-[11px] text-muted">
+              Master Pass: <code className="font-mono text-amber-300 bg-black/40 px-1.5 py-0.5 rounded">KARBON-UNLIMITED-VIP-2026</code>
+            </span>
+          </div>
+
+          {showPromoBox && (
+            <form onSubmit={handleRedeem} className="mt-3 flex flex-wrap gap-2">
+              <input
+                type="text"
+                value={promoInput}
+                onChange={(e) => setPromoInput(e.target.value)}
+                placeholder="Enter VIP Passcode or User ID (e.g. KARBON-UNLIMITED-VIP-2026)"
+                className="flex-1 min-w-[240px] px-3.5 py-2 rounded-xl bg-black/40 border border-white/20 text-xs text-foreground placeholder:text-muted focus:outline-none focus:border-amber-400 font-mono"
+              />
+              <button
+                type="submit"
+                className="px-4 py-2 rounded-xl bg-amber-400 hover:bg-amber-300 text-black font-bold text-xs transition shadow-md shadow-amber-400/20 flex items-center gap-1"
+              >
+                <Crown className="w-3.5 h-3.5 fill-black" />
+                <span>Activate VIP Pass</span>
+              </button>
+            </form>
+          )}
+        </div>
+
         {/* Free Tier Notice & Onboarding Trial */}
-        <div className="mt-8 p-4 rounded-2xl bg-black/20 border border-border flex flex-wrap items-center justify-between gap-3 text-xs">
+        <div className="mt-6 p-4 rounded-2xl bg-black/20 border border-border flex flex-wrap items-center justify-between gap-3 text-xs">
           <div className="flex items-center gap-2 text-muted">
             <HelpCircle className="w-4 h-4 text-accent" />
             <span>

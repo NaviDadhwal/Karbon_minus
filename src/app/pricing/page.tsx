@@ -12,6 +12,8 @@ import {
   Leaf,
   ChevronDown,
   ChevronUp,
+  Crown,
+  KeyRound,
 } from "lucide-react";
 import { Nav } from "@/components/Nav";
 import { Button } from "@/components/ui/Button";
@@ -79,12 +81,13 @@ export default function PricingPage() {
   const {
     state,
     purchasePlan,
-    claimStarterTrialCredit,
+    redeemPassCode,
   } = useSubscription();
 
 
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
   const [purchasingId, setPurchasingId] = useState<string | null>(null);
+  const [passInput, setPassInput] = useState("");
 
   const handlePurchase = (planId: string) => {
     setPurchasingId(planId);
@@ -94,7 +97,14 @@ export default function PricingPage() {
     }, 600);
   };
 
-  const isPro = state.tier === "pro_monthly";
+  const handleRedeemPass = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!passInput.trim()) return;
+    const ok = redeemPassCode(passInput.trim());
+    if (ok) setPassInput("");
+  };
+
+  const isUnlimited = state.tier === "pro_monthly" || state.creditsRemaining > 9000 || Boolean(state.vipPassKey);
 
   return (
     <>
@@ -119,23 +129,50 @@ export default function PricingPage() {
           {/* Current Credit State Pill */}
           <div className="mt-6 inline-flex flex-wrap items-center justify-center gap-3 px-5 py-2.5 rounded-2xl bg-card/80 border border-border text-sm shadow-md">
             <span className="text-muted">Your Current Status:</span>
-            <span className="font-bold text-accent font-mono flex items-center gap-1.5">
-              <Zap className="w-4 h-4 fill-accent/30" />
-              {isPro
-                ? "Enterprise Pro Plan (Unlimited)"
-                : `${state.creditsRemaining} Report ${state.creditsRemaining === 1 ? "Credit Available" : "Credits Available"}`}
-            </span>
-            {state.creditsRemaining === 0 && !isPro && (
-              <button
-                type="button"
-                onClick={claimStarterTrialCredit}
-                className="text-xs font-semibold text-accent hover:underline ml-2"
-              >
-                Claim Free Trial Report →
-              </button>
+            {isUnlimited ? (
+              <span className="font-bold text-amber-300 font-mono flex items-center gap-1.5">
+                <Crown className="w-4 h-4 text-amber-400 fill-amber-400/30" />
+                Unlimited VIP Pro Pass Active
+              </span>
+            ) : (
+              <span className="font-bold text-accent font-mono flex items-center gap-1.5">
+                <Zap className="w-4 h-4 fill-accent/30" />
+                {state.creditsRemaining}{" "}
+                {state.creditsRemaining === 1 ? "Report Credit Available" : "Report Credits Available"}
+              </span>
             )}
           </div>
         </section>
+
+        {/* VIP Passcode Activation Card */}
+        <div className="max-w-2xl mx-auto mb-8 p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-amber-500/10 via-amber-500/5 to-transparent border border-amber-500/30 shadow-lg">
+          <div className="flex items-center gap-2 mb-2">
+            <KeyRound className="w-4 h-4 text-amber-400" />
+            <h3 className="text-sm font-bold text-amber-300">
+              Redeem Unlimited VIP Passcode or User ID
+            </h3>
+          </div>
+          <p className="text-xs text-muted mb-3">
+            Have an administrator pass key or VIP invite? Enter your code below to activate lifetime unlimited access across all projects.
+          </p>
+          <form onSubmit={handleRedeemPass} className="flex flex-wrap gap-2">
+            <input
+              type="text"
+              value={passInput}
+              onChange={(e) => setPassInput(e.target.value)}
+              placeholder="e.g. KARBON-UNLIMITED-VIP-2026"
+              className="flex-1 min-w-[220px] px-3.5 py-2 rounded-xl bg-black/50 border border-amber-500/30 text-xs text-foreground placeholder:text-muted focus:outline-none focus:border-amber-400 font-mono"
+            />
+            <button
+              type="submit"
+              className="px-4 py-2 rounded-xl bg-amber-400 hover:bg-amber-300 text-black font-bold text-xs transition shadow-md shadow-amber-400/20 flex items-center gap-1.5"
+            >
+              <Crown className="w-3.5 h-3.5 fill-black" />
+              <span>Activate Pass</span>
+            </button>
+          </form>
+        </div>
+
 
         {/* Pricing Cards Grid */}
         <section className="mt-4 grid gap-6 md:grid-cols-3">
@@ -194,14 +231,14 @@ export default function PricingPage() {
                 <div className="mt-8 pt-4 border-t border-border/50">
                   <Button
                     type="button"
-                    disabled={isPurchasing || (plan.id === "pro_monthly" && isPro)}
+                    disabled={isPurchasing || (plan.id === "pro_monthly" && isUnlimited)}
                     onClick={() => handlePurchase(plan.id)}
                     variant={plan.popular ? "primary" : "secondary"}
                     className="w-full py-3 font-bold text-sm flex items-center justify-center gap-2 shadow-lg"
                   >
                     {isPurchasing ? (
                       <span className="animate-pulse">Processing Order...</span>
-                    ) : plan.id === "pro_monthly" && isPro ? (
+                    ) : plan.id === "pro_monthly" && isUnlimited ? (
                       <span className="flex items-center gap-1.5">
                         <ShieldCheck className="w-4 h-4 text-accent" /> Active Subscription
                       </span>
@@ -212,6 +249,7 @@ export default function PricingPage() {
                       </>
                     )}
                   </Button>
+
                 </div>
               </Card>
             );

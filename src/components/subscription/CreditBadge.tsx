@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Sparkles, Zap, ShieldCheck } from "lucide-react";
+import { Sparkles, Zap, Crown } from "lucide-react";
 import { useSubscription } from "@/context/SubscriptionContext";
 import { cn } from "@/lib/utils";
 
@@ -14,7 +14,7 @@ export function CreditBadge({
 }) {
   const { state, openUpgradeModal } = useSubscription();
 
-  const isPro = state.tier === "pro_monthly";
+  const isUnlimited = state.tier === "pro_monthly" || state.creditsRemaining > 9000 || Boolean(state.vipPassKey);
   const credits = state.creditsRemaining;
 
   return (
@@ -23,8 +23,8 @@ export function CreditBadge({
       onClick={() => openUpgradeModal()}
       className={cn(
         "relative inline-flex items-center gap-1.5 rounded-full font-medium transition-all duration-200 backdrop-blur-md group",
-        isPro
-          ? "border border-accent/60 bg-accent/20 text-accent hover:bg-accent/30 shadow-[0_0_15px_rgba(23,207,151,0.25)]"
+        isUnlimited
+          ? "border border-amber-400/60 bg-amber-400/20 text-amber-300 hover:bg-amber-400/30 shadow-[0_0_15px_rgba(251,191,36,0.3)]"
           : credits > 0
           ? "border border-accent/40 bg-accent/15 text-foreground hover:bg-accent/25 hover:border-accent/60 shadow-[0_0_12px_rgba(23,207,151,0.15)]"
           : "border border-amber-500/40 bg-amber-500/10 text-amber-300 hover:bg-amber-500/20 hover:border-amber-500/60",
@@ -33,10 +33,10 @@ export function CreditBadge({
       )}
       title="View Report Credits & Pricing"
     >
-      {isPro ? (
+      {isUnlimited ? (
         <>
-          <ShieldCheck className="w-3.5 h-3.5 text-accent animate-pulse" />
-          <span className="font-semibold text-accent">Pro Plan</span>
+          <Crown className="w-3.5 h-3.5 text-amber-400 fill-amber-400/40 animate-pulse" />
+          <span className="font-bold text-amber-300">Unlimited VIP Pass</span>
         </>
       ) : credits > 0 ? (
         <>
@@ -54,3 +54,4 @@ export function CreditBadge({
     </button>
   );
 }
+
