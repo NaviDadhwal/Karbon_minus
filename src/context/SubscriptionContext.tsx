@@ -372,13 +372,9 @@ export function SubscriptionProvider({ children }: { children: React.ReactNode }
     ],
   );
 
-  if (!mounted) {
-    return null;
-  }
-
   return (
     <SubscriptionContext.Provider value={value}>
-      {process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY && (
+      {mounted && Boolean(process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY) && (
         <ClerkEmailWatcher onAuthEmail={handleClerkUserEmail} />
       )}
       {children}
@@ -393,3 +389,4 @@ export function useSubscription() {
   }
   return ctx;
 }
+
