@@ -4,12 +4,12 @@ import { Poppins } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
-import { LeafBorder } from "@/components/LeafBorder";
 import { ToastifyHost } from "@/components/ToastifyHost";
 import { ProjectProvider } from "@/context/ProjectContext";
 import { SubscriptionProvider } from "@/context/SubscriptionContext";
 import { ThemeProvider } from "@/context/ThemeContext";
 import { UpgradeModal } from "@/components/subscription/UpgradeModal";
+
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -50,9 +50,9 @@ export default function RootLayout({
           aria-hidden
           className="app-background-gradient pointer-events-none fixed inset-0 -z-10 rotate-180"
         />
-        <LeafBorder />
 
         <ThemeProvider>
+
           <ToastifyHost />
           <SubscriptionProvider>
             <ProjectProvider>
