@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 
 import { Poppins } from "next/font/google";
-import Script from "next/script";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
@@ -35,12 +34,17 @@ export default function RootLayout({
 }>) {
   const content = (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{var p=window.location.pathname;if(p==="/"||p==="")document.documentElement.classList.add("dark");}catch(e){}`,
+          }}
+        />
+      </head>
       <body
         className={`${poppins.variable} min-h-screen bg-background font-sans text-foreground antialiased`}
       >
-        <Script id="landing-dark" strategy="beforeInteractive">
-          {`try{var p=window.location.pathname;if(p==="/"||p==="")document.documentElement.classList.add("dark");}catch(e){}`}
-        </Script>
+
         <div
           aria-hidden
           className="app-background-gradient pointer-events-none fixed inset-0 -z-10 rotate-180"

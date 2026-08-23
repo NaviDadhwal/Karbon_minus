@@ -41,10 +41,11 @@ export default function LandingPage() {
           </div>
         </section>
 
-        <section className="absolute bottom-0 ">
+        <section className="pointer-events-none absolute inset-0 z-0 flex items-end justify-center overflow-hidden opacity-80">
           <Spline scene="https://prod.spline.design/8OmNtmq6yAb4HYWP/scene.splinecode" />
         </section>
       </main>
     </>
   );
 }
+
