@@ -251,12 +251,6 @@ export default function ProjectDashboardPage() {
             <Link href={`/project/${id}/materials`}>
               <Button>Manage materials</Button>
             </Link>
-            <Link href={`/project/${id}/optimize`}>
-              <Button variant="secondary">Run optimization</Button>
-            </Link>
-            <Link href={`/project/${id}/report`}>
-              <Button variant="secondary">Report</Button>
-            </Link>
           </div>
         </Card>
       </main>
