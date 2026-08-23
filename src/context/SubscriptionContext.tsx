@@ -17,10 +17,13 @@ import {
 import { notifySuccess, notifyInfo, notifyError } from "@/lib/toast";
 
 export const UNLIMITED_PASS_KEYS = [
-  "KARBON-UNLIMITED-VIP-2026",
   "ADMIN-VIP-PASS",
+  "CODE-ADMIN-2026",
+  "ADMIN@CO2DE.COM",
+  "KARBON-UNLIMITED-VIP-2026",
   "UNLIMITED-PRO-2026",
 ];
+
 
 export const PRICING_PLANS: PricingPlan[] = [
   {

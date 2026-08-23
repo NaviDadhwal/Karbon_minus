@@ -161,7 +161,8 @@ export default function PricingPage() {
               type="text"
               value={passInput}
               onChange={(e) => setPassInput(e.target.value)}
-              placeholder="e.g. KARBON-UNLIMITED-VIP-2026"
+              placeholder="e.g. ADMIN-VIP-PASS or CODE-ADMIN-2026"
+
               className="flex-1 min-w-[220px] px-3.5 py-2 rounded-xl bg-black/50 border border-amber-500/30 text-xs text-foreground placeholder:text-muted focus:outline-none focus:border-amber-400 font-mono"
             />
             <button

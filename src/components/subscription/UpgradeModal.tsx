@@ -212,7 +212,7 @@ export function UpgradeModal() {
               <span>Have a VIP Passcode or Unlimited User ID?</span>
             </button>
             <span className="text-[11px] text-muted">
-              Master Pass: <code className="font-mono text-amber-300 bg-black/40 px-1.5 py-0.5 rounded">KARBON-UNLIMITED-VIP-2026</code>
+              Master Pass: <code className="font-mono text-amber-300 bg-black/40 px-1.5 py-0.5 rounded">CODE-ADMIN-2026</code>
             </span>
           </div>
 
@@ -222,9 +222,10 @@ export function UpgradeModal() {
                 type="text"
                 value={promoInput}
                 onChange={(e) => setPromoInput(e.target.value)}
-                placeholder="Enter VIP Passcode or User ID (e.g. KARBON-UNLIMITED-VIP-2026)"
+                placeholder="Enter VIP Passcode or User ID (e.g. CODE-ADMIN-2026 or ADMIN-VIP-PASS)"
                 className="flex-1 min-w-[240px] px-3.5 py-2 rounded-xl bg-black/40 border border-white/20 text-xs text-foreground placeholder:text-muted focus:outline-none focus:border-amber-400 font-mono"
               />
+
               <button
                 type="submit"
                 className="px-4 py-2 rounded-xl bg-amber-400 hover:bg-amber-300 text-black font-bold text-xs transition shadow-md shadow-amber-400/20 flex items-center gap-1"
