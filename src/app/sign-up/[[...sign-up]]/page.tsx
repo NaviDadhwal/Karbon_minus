@@ -21,14 +21,14 @@ export default function SignUpPage() {
         <Link href="/" className="inline-flex items-center gap-2.5 group">
           <Image
             src="/Logo.png"
-            alt="Karbon Minus"
+            alt="CO₂DE"
             width={44}
             height={44}
             className="h-11 w-11 object-contain transition-transform group-hover:scale-105"
             priority
           />
           <span className="font-serif text-2xl font-bold tracking-tight text-foreground">
-            Karbon Minus
+            CO₂DE
           </span>
         </Link>
         <p className="text-xs text-muted max-w-sm">
@@ -87,8 +87,9 @@ export default function SignUpPage() {
               </div>
               <div>
                 <h2 className="text-lg font-bold text-foreground">
-                  Get Started with Karbon Minus
+                  Get Started with CO₂DE
                 </h2>
+
                 <p className="text-xs text-muted">Google &amp; Email Sign-Up</p>
               </div>
             </div>

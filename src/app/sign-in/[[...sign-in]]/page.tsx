@@ -21,15 +21,16 @@ export default function SignInPage() {
         <Link href="/" className="inline-flex items-center gap-2.5 group">
           <Image
             src="/Logo.png"
-            alt="Karbon Minus"
+            alt="CO₂DE"
             width={44}
             height={44}
             className="h-11 w-11 object-contain transition-transform group-hover:scale-105"
             priority
           />
           <span className="font-serif text-2xl font-bold tracking-tight text-foreground">
-            Karbon Minus
+            CO₂DE
           </span>
+
         </Link>
         <p className="text-xs text-muted max-w-sm">
           Green Procurement Decision Support &amp; Embodied Carbon Intelligence

@@ -55,9 +55,10 @@ export function Nav({
               className="h-8 w-8 sm:h-9 sm:w-9 shrink-0 object-contain brightness-75 contrast-125 dark:brightness-100 dark:contrast-100"
               priority
             />
-            <span className="font-serif text-base sm:text-lg tracking-tight">
-              Karbon Minus
+            <span className="font-serif text-base sm:text-lg tracking-tight font-bold">
+              CO₂DE
             </span>
+
           </Link>
 
           {minimal ? (

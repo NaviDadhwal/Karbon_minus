@@ -335,8 +335,9 @@ export default function NfcPassportPage() {
                   {lot.verificationHash}
                 </p>
                 <span className="text-[10px] text-[var(--muted-subtle)] mt-1 block">
-                  Cryptographically signed by Karbon-Minus Middleman Ledger.
+                  Cryptographically signed by CO₂DE Ledger.
                 </span>
+
               </div>
             </div>
           )}

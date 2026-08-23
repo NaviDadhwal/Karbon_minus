@@ -68,9 +68,10 @@ const FAQS = [
     a: "Report credits purchased via our Pay-As-You-Go or 5-Report Pack are valid for 12 full months from the date of purchase.",
   },
   {
-    q: "What green building frameworks do Karbon Minus reports comply with?",
+    q: "What green building frameworks do CO₂DE reports comply with?",
     a: "Our PDF and CSV reports generate embodied carbon disclosures compatible with IGBC Green Building Rating, GRIHA v2019, LEED v4.1 (MR Credit: Building Life-Cycle Impact Reduction), and ECBC compliance submissions.",
   },
+
   {
     q: "Can I try before purchasing?",
     a: "Yes! Every user receives 1 free complimentary trial report credit upon onboarding, allowing you to test the full carbon optimization and export workflow on a real project.",

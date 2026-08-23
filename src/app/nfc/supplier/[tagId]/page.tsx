@@ -151,8 +151,9 @@ export default function SupplierNfcPage() {
               {lot.verificationHash}
             </p>
             <span className="text-[10px] text-[var(--muted-subtle)] mt-1.5 block">
-              Cryptographically signed by Karbon-Minus Middleman Ledger for tamper prevention.
+              Cryptographically signed by CO₂DE Ledger for tamper prevention.
             </span>
+
           </div>
 
           {/* Actions */}

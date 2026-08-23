@@ -18,14 +18,15 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "Embodied Carbon Negotiator",
+  title: "CO₂DE — Embodied Carbon & Cost Intelligence",
   description:
-    "Procurement decision support for embodied carbon and cost in Indian construction.",
+    "CO₂DE: Procurement decision support for embodied carbon and cost in Indian construction.",
   icons: {
     icon: [{ url: "/Logo.png", type: "image/png" }],
     apple: [{ url: "/Logo.png" }],
   },
 };
+
 
 export default function RootLayout({
   children,

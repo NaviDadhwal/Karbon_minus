@@ -213,9 +213,10 @@ export function SubscriptionProvider({ children }: { children: React.ReactNode }
           subscriptionExpiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
         };
         notifySuccess(
-          "Welcome to Karbon Minus Pro!",
+          "Welcome to CO₂DE Pro!",
           "Unlimited project reports and AI carbon alternatives activated.",
         );
+
       } else {
         const addedCredits = plan.credits;
         next = {

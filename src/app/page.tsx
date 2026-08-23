@@ -27,10 +27,11 @@ export default function LandingPage() {
                 Decide faster on embodied carbon and cost
               </h1>
               <p className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-muted md:text-lg">
-                Karbon Minus helps you compare materials, run cost–carbon
+                CO₂DE helps you compare materials, run cost–carbon
                 optimization, and prepare negotiation briefs—all aligned with your
                 carbon budget and cost ceiling.
               </p>
+
               <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
                 <Button href="/projects" className="min-w-[10.5rem] px-8 py-2.5 text-base">
                   Get started
