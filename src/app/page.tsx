@@ -1,9 +1,10 @@
 "use client";
 
-import Link from "next/link";
 import { Nav } from "@/components/Nav";
 import { Button } from "@/components/ui/Button";
 import Spline from "@splinetool/react-spline/next";
+
+
 
 export default function LandingPage() {
   return (
@@ -31,12 +32,11 @@ export default function LandingPage() {
                 carbon budget and cost ceiling.
               </p>
               <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
-                <Link href="/projects">
-                  <Button className="min-w-[10.5rem] px-8 py-2.5 text-base">
-                    Get started
-                  </Button>
-                </Link>
-            </div>
+                <Button href="/projects" className="min-w-[10.5rem] px-8 py-2.5 text-base">
+                  Get started
+                </Button>
+              </div>
+
             </div>
           </div>
         </section>

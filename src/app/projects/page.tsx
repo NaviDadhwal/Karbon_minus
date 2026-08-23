@@ -5,11 +5,13 @@ import { Nav } from "@/components/Nav";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { useProject } from "@/context/ProjectContext";
-import { notifySuccess } from "@/lib/toast";
+import { notifyError, notifySuccess } from "@/lib/toast";
 import { formatInr, formatKgCo2e } from "@/lib/utils";
+import { Plus, Sparkles, FolderOpen, Trash2 } from "lucide-react";
+import { AllDemosLoadedError } from "@/lib/demo-templates";
 
 export default function ProjectsPage() {
-  const { projects, deleteProject } = useProject();
+  const { projects, deleteProject, loadDemo } = useProject();
 
   function handleDeleteProject(id: string, name: string) {
     const confirmed = window.confirm(
@@ -39,20 +41,62 @@ export default function ProjectsPage() {
             </p>
           </div>
           <div className="flex gap-2">
-            <Link href="/project/new">
-              <Button>New project</Button>
-            </Link>
+            <Button href="/project/new" className="flex items-center gap-1.5 shadow-lg shadow-accent/20">
+              <Plus className="w-4 h-4" />
+              <span>New project</span>
+            </Button>
           </div>
         </div>
 
         <Card>
-          <h2 className="mb-4 text-lg font-semibold text-foreground">
-            All projects
-          </h2>
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-lg font-semibold text-foreground">
+              All projects
+            </h2>
+            <span className="text-xs text-muted">
+              {projects.length} {projects.length === 1 ? "Project" : "Projects"}
+            </span>
+          </div>
+
           {projects.length === 0 ? (
-            <p className="text-muted">
-              No projects yet. Create one or load the demo from the navbar.
-            </p>
+            <div className="text-center py-10 px-4 space-y-4">
+              <div className="p-3 rounded-2xl bg-accent/10 border border-accent/20 text-accent w-fit mx-auto">
+                <FolderOpen className="w-8 h-8" />
+              </div>
+              <div>
+                <h3 className="text-base font-semibold text-foreground">No projects yet</h3>
+                <p className="text-sm text-muted mt-1 max-w-md mx-auto">
+                  Create a new project workspace or load a sample Indian construction demo project.
+                </p>
+              </div>
+              <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
+                <Button href="/project/new" className="flex items-center gap-1.5 shadow-md">
+                  <Plus className="w-4 h-4" />
+                  <span>Create First Project</span>
+                </Button>
+                <Button
+                  variant="secondary"
+                  onClick={() => {
+                    void (async () => {
+                      try {
+                        const { name } = await loadDemo();
+                        notifySuccess("Demo project loaded", name);
+                      } catch (e) {
+                        if (e instanceof AllDemosLoadedError) {
+                          notifyError("No new demos left", e.message);
+                        } else {
+                          notifyError("Could not load demo", "Please try again.");
+                        }
+                      }
+                    })();
+                  }}
+                  className="flex items-center gap-1.5"
+                >
+                  <Sparkles className="w-4 h-4 text-accent" />
+                  <span>Load Sample Demo</span>
+                </Button>
+              </div>
+            </div>
           ) : (
             <ul className="divide-y divide-divide">
               {projects.map(({ project }) => (
@@ -63,27 +107,28 @@ export default function ProjectsPage() {
                   <div>
                     <Link
                       href={`/project/${project.id}`}
-                      className="font-medium text-accent hover:underline"
+                      className="font-medium text-accent hover:underline text-base"
                     >
                       {project.name}
                     </Link>
                     <div className="mt-1 text-xs text-subtle">
-                      Budget {formatKgCo2e(project.carbonBudget)} · Ceiling{" "}
-                      {formatInr(project.costCeiling)}
+                      Budget: <strong>{formatKgCo2e(project.carbonBudget)}</strong> &bull; Ceiling:{" "}
+                      <strong>{formatInr(project.costCeiling)}</strong>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Link href={`/project/${project.id}`}>
-                      <Button variant="secondary">Open</Button>
-                    </Link>
+                    <Button href={`/project/${project.id}`} variant="secondary">
+                      Open
+                    </Button>
                     <Button
                       variant="secondary"
-                      className="border-danger/50 text-danger hover:bg-danger/10"
+                      className="border-danger/50 text-danger hover:bg-danger/10 p-2.5"
                       onClick={() =>
                         handleDeleteProject(project.id, project.name)
                       }
+                      title="Delete Project"
                     >
-                      Delete
+                      <Trash2 className="w-4 h-4" />
                     </Button>
                   </div>
                 </li>
