@@ -70,7 +70,7 @@ export function saveActiveProjectId(id: string | null): void {
   else localStorage.setItem(ACTIVE_KEY, id);
 }
 
-const SUBSCRIPTION_KEY = "ecn_subscription_state_v3";
+const SUBSCRIPTION_KEY = "ecn_subscription_state_v4";
 
 export const DEFAULT_SUBSCRIPTION_STATE: import("@/types").UserSubscriptionState = {
   tier: "free",
@@ -78,6 +78,7 @@ export const DEFAULT_SUBSCRIPTION_STATE: import("@/types").UserSubscriptionState
   unlockedProjectIds: [],
   totalReportsGenerated: 0,
 };
+
 
 export function loadSubscriptionState(): import("@/types").UserSubscriptionState {
   if (typeof window === "undefined") return DEFAULT_SUBSCRIPTION_STATE;
