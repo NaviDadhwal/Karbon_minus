@@ -4,16 +4,15 @@ import { NextResponse } from "next/server";
 const isPublicRoute = createRouteMatcher([
   "/",
   "/pricing(.*)",
-  "/projects(.*)",
-  "/project(.*)",
   "/sign-in(.*)",
   "/sign-up(.*)",
   "/nfc(.*)",
-  "/api(.*)",
+  "/api/demo(.*)",
+  "/api/materials(.*)",
 ]);
 
 const hasClerk = Boolean(
-  process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY && process.env.CLERK_SECRET_KEY,
+  process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY || process.env.CLERK_SECRET_KEY,
 );
 
 export default hasClerk

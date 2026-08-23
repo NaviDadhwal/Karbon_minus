@@ -171,13 +171,14 @@ export function Nav({
                     <SignedIn>
                       <div className="flex items-center gap-2">
                         <UserButton
-                          afterSignOutUrl="/"
+                          afterSignOutUrl="/sign-in"
                           appearance={{
                             elements: {
                               avatarBox: "w-7 h-7 rounded-full border border-accent/40",
                             },
                           }}
                         />
+
                       </div>
                     </SignedIn>
                     <SignedOut>
@@ -251,13 +252,14 @@ export function Nav({
                 {process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY ? (
                   <SignedIn>
                     <UserButton
-                      afterSignOutUrl="/"
+                      afterSignOutUrl="/sign-in"
                       appearance={{
                         elements: {
                           avatarBox: "w-7 h-7 rounded-full border border-accent/40",
                         },
                       }}
                     />
+
                   </SignedIn>
                 ) : null}
 
