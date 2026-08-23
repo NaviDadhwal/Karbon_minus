@@ -142,9 +142,12 @@ export function SubscriptionProvider({ children }: { children: React.ReactNode }
   const [isUpgradeModalOpen, setIsUpgradeModalOpen] = useState(false);
   const [upgradeModalContext, setUpgradeModalContext] = useState<string | null>(null);
 
-  const persist = useCallback((next: UserSubscriptionState) => {
-    setState(next);
-    saveSubscriptionState(next);
+  const persist = useCallback((next: UserSubscriptionState | ((prev: UserSubscriptionState) => UserSubscriptionState)) => {
+    setState((prev) => {
+      const computed = typeof next === "function" ? next(prev) : next;
+      saveSubscriptionState(computed);
+      return computed;
+    });
   }, []);
 
   const redeemPassCode = useCallback((codeOrUserId: string): boolean => {
@@ -163,15 +166,13 @@ export function SubscriptionProvider({ children }: { children: React.ReactNode }
       cleanLower === "hackunseen";
 
     if (isMatch) {
-      const next: UserSubscriptionState = {
+      persist((prev) => ({
+        ...prev,
         tier: "pro_monthly",
         creditsRemaining: 99999,
-        unlockedProjectIds: state.unlockedProjectIds,
-        totalReportsGenerated: state.totalReportsGenerated,
         subscriptionExpiresAt: "2099-12-31T23:59:59.999Z",
         vipPassKey: clean,
-      };
-      persist(next);
+      }));
       notifySuccess(
         "👑 Unlimited VIP Pass Activated!",
         `Verified "${clean}". You now have lifetime unlimited access to all AI carbon alternatives, Pareto optimization, and certified exports.`,
@@ -181,7 +182,7 @@ export function SubscriptionProvider({ children }: { children: React.ReactNode }
       notifyError("Invalid Pass Code", "The entered pass code or User ID was not recognized.");
       return false;
     }
-  }, [state, persist]);
+  }, [persist]);
 
   const handleClerkUserEmail = useCallback(
     (email: string) => {
@@ -192,23 +193,23 @@ export function SubscriptionProvider({ children }: { children: React.ReactNode }
         clean.startsWith("navidadhwal");
 
       if (isUnlimitedUser) {
-        if (state.tier !== "pro_monthly" || !state.vipPassKey) {
-          const next: UserSubscriptionState = {
-            ...state,
+        persist((prev) => {
+          if (prev.tier === "pro_monthly" && prev.vipPassKey) return prev;
+          notifySuccess(
+            "👑 Google VIP Account Verified",
+            `Welcome ${clean}! Permanent Unlimited Pro Pass activated for your account.`,
+          );
+          return {
+            ...prev,
             tier: "pro_monthly",
             creditsRemaining: 99999,
             subscriptionExpiresAt: "2099-12-31T23:59:59.999Z",
             vipPassKey: `GOOGLE_AUTH:${clean}`,
           };
-          persist(next);
-          notifySuccess(
-            "👑 Google VIP Account Verified",
-            `Welcome ${clean}! Permanent Unlimited Pro Pass activated for your account.`,
-          );
-        }
+        });
       }
     },
-    [state, persist],
+    [persist],
   );
 
   useEffect(() => {
@@ -229,6 +230,7 @@ export function SubscriptionProvider({ children }: { children: React.ReactNode }
       }
     }
   }, [redeemPassCode]);
+
 
   const openUpgradeModal = useCallback((contextReason?: string) => {
     setUpgradeModalContext(contextReason ?? null);

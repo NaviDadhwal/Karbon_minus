@@ -1,8 +1,8 @@
 "use client";
 
-import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
+
 import { Nav } from "@/components/Nav";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
@@ -248,10 +248,9 @@ export default function ProjectDashboardPage() {
             Materials: {materials.length} line items
           </p>
           <div className="mt-6 flex flex-wrap gap-2">
-            <Link href={`/project/${id}/materials`}>
-              <Button>Manage materials</Button>
-            </Link>
+            <Button href={`/project/${id}/materials`}>Manage materials</Button>
           </div>
+
         </Card>
       </main>
     </>

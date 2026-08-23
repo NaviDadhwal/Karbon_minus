@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import Link from "next/link";
+
 import {
   Check,
   X,
@@ -271,11 +271,10 @@ export default function PricingPage() {
             </p>
           </div>
 
-          <Link href="/projects">
-            <Button variant="secondary" className="px-6 py-3 font-semibold text-sm shrink-0">
-              Start Free Workspace →
-            </Button>
-          </Link>
+          <Button href="/projects" variant="secondary" className="px-6 py-3 font-semibold text-sm shrink-0">
+            Start Free Workspace →
+          </Button>
+
         </section>
 
         {/* Detailed Feature Comparison Table */}

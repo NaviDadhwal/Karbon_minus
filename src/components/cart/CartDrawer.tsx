@@ -61,7 +61,8 @@ export function CartDrawer({
     };
   }, [isOpen]);
 
-  if (!mounted) return null;
+  if (!mounted || !isOpen) return null;
+
 
   const isUnlocked = project ? hasProjectAccess(project.id) : false;
 
