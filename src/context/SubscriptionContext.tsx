@@ -15,6 +15,14 @@ import {
   saveSubscriptionState,
 } from "@/lib/storage";
 import { notifySuccess, notifyInfo, notifyError } from "@/lib/toast";
+import { useUser } from "@clerk/nextjs";
+
+export const UNLIMITED_EMAILS = [
+  "navidadhwal06@gmail.com",
+  "navidadhwal@gmail.com",
+  "navi.dadhwal@gmail.com",
+  "navidadhwal",
+];
 
 export const UNLIMITED_PASS_KEYS = [
   "KARBON-UNLIMITED-VIP-2026",
@@ -24,6 +32,10 @@ export const UNLIMITED_PASS_KEYS = [
   "HACKUNSEEN-UNLIMITED",
   "VIP-UNLIMITED",
   "user_unlimited_vip",
+  "navidadhwal06@gmail.com",
+  "navidadhwal@gmail.com",
+  "navidadhwal",
+  "navi",
 ];
 
 export const PRICING_PLANS: PricingPlan[] = [
@@ -101,6 +113,29 @@ interface SubscriptionContextType {
 
 const SubscriptionContext = createContext<SubscriptionContextType | null>(null);
 
+function ClerkEmailWatcher({
+  onAuthEmail,
+}: {
+  onAuthEmail: (email: string) => void;
+}) {
+  const { isLoaded, isSignedIn, user } = useUser();
+
+  useEffect(() => {
+    if (!isLoaded || !isSignedIn || !user) return;
+    const primaryEmail = user.primaryEmailAddress?.emailAddress;
+    if (primaryEmail) {
+      onAuthEmail(primaryEmail);
+    }
+    // Also check any linked emails from Google
+    user.emailAddresses?.forEach((e) => {
+      if (e.emailAddress) onAuthEmail(e.emailAddress);
+    });
+  }, [isLoaded, isSignedIn, user, onAuthEmail]);
+
+  return null;
+}
+
+
 export function SubscriptionProvider({ children }: { children: React.ReactNode }) {
   const [state, setState] = useState<UserSubscriptionState>(DEFAULT_SUBSCRIPTION_STATE);
   const [mounted, setMounted] = useState(false);
@@ -115,16 +150,17 @@ export function SubscriptionProvider({ children }: { children: React.ReactNode }
   const redeemPassCode = useCallback((codeOrUserId: string): boolean => {
     if (!codeOrUserId) return false;
     const clean = codeOrUserId.trim();
+    const cleanLower = clean.toLowerCase();
     const cleanUpper = clean.toUpperCase();
 
     const isMatch =
-      UNLIMITED_PASS_KEYS.some(
-        (key) => key.toUpperCase() === cleanUpper || key.toLowerCase() === clean.toLowerCase(),
-      ) ||
+      UNLIMITED_PASS_KEYS.some((k) => k.toLowerCase() === cleanLower) ||
+      UNLIMITED_EMAILS.some((e) => e.toLowerCase() === cleanLower) ||
       cleanUpper.startsWith("VIP-") ||
       cleanUpper.startsWith("ADMIN-") ||
-      clean === "hackunseen" ||
-      clean === "admin";
+      cleanLower.includes("navidadhwal") ||
+      cleanLower === "admin" ||
+      cleanLower === "hackunseen";
 
     if (isMatch) {
       const next: UserSubscriptionState = {
@@ -138,7 +174,7 @@ export function SubscriptionProvider({ children }: { children: React.ReactNode }
       persist(next);
       notifySuccess(
         "👑 Unlimited VIP Pass Activated!",
-        `Pass code "${clean}" verified. You now have lifetime unlimited reports and AI alternatives.`,
+        `Verified "${clean}". You now have lifetime unlimited access to all AI carbon alternatives, Pareto optimization, and certified exports.`,
       );
       return true;
     } else {
@@ -146,6 +182,34 @@ export function SubscriptionProvider({ children }: { children: React.ReactNode }
       return false;
     }
   }, [state, persist]);
+
+  const handleClerkUserEmail = useCallback(
+    (email: string) => {
+      const clean = email.toLowerCase().trim();
+      const isUnlimitedUser =
+        UNLIMITED_EMAILS.some((e) => e.toLowerCase() === clean) ||
+        clean === "navidadhwal06@gmail.com" ||
+        clean.startsWith("navidadhwal");
+
+      if (isUnlimitedUser) {
+        if (state.tier !== "pro_monthly" || !state.vipPassKey) {
+          const next: UserSubscriptionState = {
+            ...state,
+            tier: "pro_monthly",
+            creditsRemaining: 99999,
+            subscriptionExpiresAt: "2099-12-31T23:59:59.999Z",
+            vipPassKey: `GOOGLE_AUTH:${clean}`,
+          };
+          persist(next);
+          notifySuccess(
+            "👑 Google VIP Account Verified",
+            `Welcome ${clean}! Permanent Unlimited Pro Pass activated for your account.`,
+          );
+        }
+      }
+    },
+    [state, persist],
+  );
 
   useEffect(() => {
     const loaded = loadSubscriptionState();
@@ -314,6 +378,9 @@ export function SubscriptionProvider({ children }: { children: React.ReactNode }
 
   return (
     <SubscriptionContext.Provider value={value}>
+      {process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY && (
+        <ClerkEmailWatcher onAuthEmail={handleClerkUserEmail} />
+      )}
       {children}
     </SubscriptionContext.Provider>
   );
