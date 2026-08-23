@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
+import { ClerkProvider } from "@clerk/nextjs";
 import { LeafBorder } from "@/components/LeafBorder";
 import { ToastifyHost } from "@/components/ToastifyHost";
 import { ProjectProvider } from "@/context/ProjectContext";
@@ -29,7 +30,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return (
+  const content = (
     <html lang="en" suppressHydrationWarning>
       <body
         className={`${poppins.variable} min-h-screen bg-background font-sans text-foreground antialiased`}
@@ -43,14 +44,19 @@ export default function RootLayout({
         />
         <LeafBorder />
 
-          <ThemeProvider>
-            <ToastifyHost />
-            <ProjectProvider>
-              <div className="relative z-10 min-h-screen">{children}</div>
-            </ProjectProvider>
-          </ThemeProvider>
-
+        <ThemeProvider>
+          <ToastifyHost />
+          <ProjectProvider>
+            <div className="relative z-10 min-h-screen">{children}</div>
+          </ProjectProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
+
+  if (!process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY) {
+    return content;
+  }
+
+  return <ClerkProvider>{content}</ClerkProvider>;
 }

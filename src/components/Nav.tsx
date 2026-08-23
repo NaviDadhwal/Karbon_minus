@@ -11,6 +11,7 @@ import { useTheme } from "@/context/ThemeContext";
 import { notifyError, notifySuccess } from "@/lib/toast";
 import { cn } from "@/lib/utils";
 import { CartDrawer } from "@/components/cart/CartDrawer";
+import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 
 export function Nav({
   projectId,
@@ -137,6 +138,39 @@ export function Nav({
                   <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-accent animate-ping opacity-75" />
                 )}
               </button>
+
+              {/* Auth Controls */}
+              {process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY ? (
+                <>
+                  <SignedIn>
+                    <div className="flex items-center gap-2">
+                      <UserButton
+                        afterSignOutUrl="/"
+                        appearance={{
+                          elements: {
+                            avatarBox: "w-8 h-8 rounded-full border border-accent/40",
+                          },
+                        }}
+                      />
+                    </div>
+                  </SignedIn>
+                  <SignedOut>
+                    <Link
+                      href="/sign-in"
+                      className="px-3 py-1.5 rounded-xl border border-white/15 bg-white/5 hover:bg-white/10 text-xs font-semibold text-foreground transition"
+                    >
+                      Sign in
+                    </Link>
+                  </SignedOut>
+                </>
+              ) : (
+                <Link
+                  href="/sign-in"
+                  className="px-3 py-1.5 rounded-xl border border-white/15 bg-white/5 hover:bg-white/10 text-xs font-semibold text-foreground transition"
+                >
+                  Sign in
+                </Link>
+              )}
 
               {/* Dark/Light Theme Toggle */}
               <button
