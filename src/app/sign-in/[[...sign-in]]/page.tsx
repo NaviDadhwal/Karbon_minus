@@ -5,6 +5,8 @@ import Image from "next/image";
 import { SignIn } from "@clerk/nextjs";
 import { ArrowRight, ShieldCheck, CheckCircle2, Lock } from "lucide-react";
 
+import { dark } from "@clerk/themes";
+
 export default function SignInPage() {
   const hasClerkKey = Boolean(process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY);
 
@@ -43,23 +45,36 @@ export default function SignInPage() {
             signUpUrl="/sign-up"
             fallbackRedirectUrl="/projects"
             appearance={{
+              baseTheme: dark,
+              variables: {
+                colorPrimary: "#17cf97",
+                colorBackground: "#071712",
+                colorInputBackground: "#0b221a",
+                colorInputText: "#ffffff",
+                colorText: "#ffffff",
+                colorTextSecondary: "#94a3b8",
+                colorTextOnPrimaryBackground: "#000000",
+                colorDanger: "#f43f5e",
+                borderRadius: "1rem",
+              },
               elements: {
                 rootBox: "w-full",
-                card: "bg-card/90 border border-border shadow-2xl rounded-2xl backdrop-blur-xl p-6",
-                headerTitle: "text-foreground font-bold text-xl",
-                headerSubtitle: "text-muted text-sm",
+                card: "bg-[#071712]/95 border border-emerald-500/20 shadow-[0_0_50px_rgba(0,0,0,0.6)] backdrop-blur-2xl rounded-3xl p-7",
+                headerTitle: "text-foreground font-bold text-xl font-serif text-white",
+                headerSubtitle: "text-emerald-200/70 text-xs mt-1",
                 socialButtonsBlockButton:
-                  "border border-border bg-input-bg hover:bg-card-hover text-foreground font-medium rounded-xl transition py-2.5",
-                socialButtonsBlockButtonText: "text-foreground font-semibold text-xs",
-                dividerLine: "bg-border",
-                dividerText: "text-muted text-xs uppercase tracking-wider",
-                formFieldLabel: "text-label text-xs font-semibold",
+                  "bg-[#0d261d] border border-emerald-500/25 hover:bg-emerald-500/15 hover:border-emerald-500/40 text-white font-semibold py-3 px-4 rounded-2xl transition-all duration-300 shadow-md",
+                socialButtonsBlockButtonText: "text-white font-semibold text-xs",
+                dividerLine: "bg-emerald-500/20",
+                dividerText: "text-emerald-300/60 text-xs uppercase tracking-widest font-mono",
+                formFieldLabel: "text-emerald-100/90 text-xs font-semibold tracking-wide",
                 formFieldInput:
-                  "bg-input-bg border border-border text-foreground focus:border-accent focus:ring-1 focus:ring-accent rounded-xl py-2",
+                  "bg-[#0b221a] border border-emerald-500/25 focus:border-accent focus:ring-2 focus:ring-accent/20 text-white rounded-xl py-3 px-4 transition text-sm placeholder:text-muted",
                 formButtonPrimary:
-                  "bg-accent hover:opacity-90 text-black font-bold rounded-xl py-2.5 shadow-lg shadow-accent/20 transition",
-                footerActionLink: "text-accent font-semibold hover:underline",
-                footerActionText: "text-muted text-xs",
+                  "bg-accent hover:bg-[#14ba87] text-black font-extrabold rounded-xl py-3 shadow-[0_0_20px_rgba(23,207,151,0.35)] hover:shadow-[0_0_30px_rgba(23,207,151,0.5)] transition-all duration-300 text-sm",
+                footer: "bg-transparent border-t border-emerald-500/15 mt-4 pt-4",
+                footerActionLink: "text-accent font-bold hover:underline transition",
+                footerActionText: "text-emerald-100/70 text-xs",
               },
             }}
           />

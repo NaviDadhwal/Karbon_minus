@@ -4,6 +4,7 @@ import { Poppins } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
+import { dark } from "@clerk/themes";
 import { LeafBorder } from "@/components/LeafBorder";
 import { ToastifyHost } from "@/components/ToastifyHost";
 import { ProjectProvider } from "@/context/ProjectContext";
@@ -58,5 +59,20 @@ export default function RootLayout({
     return content;
   }
 
-  return <ClerkProvider>{content}</ClerkProvider>;
+  return (
+    <ClerkProvider
+      appearance={{
+        baseTheme: dark,
+        variables: {
+          colorPrimary: "#17cf97",
+          colorBackground: "#071712",
+          colorInputBackground: "#0b221a",
+          colorInputText: "#ffffff",
+          colorText: "#ffffff",
+        },
+      }}
+    >
+      {content}
+    </ClerkProvider>
+  );
 }
