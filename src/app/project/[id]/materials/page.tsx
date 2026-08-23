@@ -482,31 +482,19 @@ export default function MaterialsPage() {
             </div>
 
             {/* Buttons */}
-            <div className="grid gap-4 sm:grid-cols-2">
-              {/* Optimize */}
-              <Link
-                href={`/project/${id}/optimize`}
-                className="group rounded-2xl bg-accent px-6 py-5 text-black transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_0_25px_rgba(23,207,151,0.35)]"
-              >
-                <div className="text-lg font-semibold">
-                  Optimize Procurement →
-                </div>
-
-                <p className="mt-1 text-sm text-black/70">
-                  Find best cost vs carbon combinations
-                </p>
-              </Link>
-
-              {/* Report */}
+            <div>
               <Link
                 href={`/project/${id}/report`}
-                className="group rounded-2xl border border-accent px-6 py-5 text-accent transition-all duration-300 hover:-translate-y-1 hover:bg-accent/10"
+                className="group inline-flex items-center justify-between rounded-2xl bg-accent px-8 py-5 text-black transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_0_25px_rgba(23,207,151,0.35)]"
               >
-                <div className="text-lg font-semibold">Generate Report →</div>
-
-                <p className="mt-1 text-sm text-muted">
-                  Export carbon insights and summary
-                </p>
+                <div>
+                  <div className="text-lg font-bold">
+                    Generate Carbon Report →
+                  </div>
+                  <p className="mt-1 text-sm text-black/70">
+                    Export embodied carbon breakdown, supplier bills, and compliance insights
+                  </p>
+                </div>
               </Link>
             </div>
           </div>

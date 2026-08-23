@@ -32,7 +32,6 @@ export function Nav({
     ? [
         { href: `${base}`, label: "Overview" },
         { href: `${base}/materials`, label: "Materials" },
-        { href: `${base}/optimize`, label: "Optimize" },
         { href: `${base}/report`, label: "Report" },
       ]
     : [];
