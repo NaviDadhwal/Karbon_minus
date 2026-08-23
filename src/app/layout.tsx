@@ -8,7 +8,9 @@ import { dark } from "@clerk/themes";
 import { LeafBorder } from "@/components/LeafBorder";
 import { ToastifyHost } from "@/components/ToastifyHost";
 import { ProjectProvider } from "@/context/ProjectContext";
+import { SubscriptionProvider } from "@/context/SubscriptionContext";
 import { ThemeProvider } from "@/context/ThemeContext";
+import { UpgradeModal } from "@/components/subscription/UpgradeModal";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -47,9 +49,12 @@ export default function RootLayout({
 
         <ThemeProvider>
           <ToastifyHost />
-          <ProjectProvider>
-            <div className="relative z-10 min-h-screen">{children}</div>
-          </ProjectProvider>
+          <SubscriptionProvider>
+            <ProjectProvider>
+              <div className="relative z-10 min-h-screen">{children}</div>
+              <UpgradeModal />
+            </ProjectProvider>
+          </SubscriptionProvider>
         </ThemeProvider>
       </body>
     </html>

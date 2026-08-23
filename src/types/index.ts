@@ -158,3 +158,27 @@ export interface StoredProjectBundle {
   lastOptimization?: OptimizationResult;
   selectedCombinationId?: string;
 }
+
+export type SubscriptionTier = "free" | "pay_per_report" | "pro_monthly";
+
+export interface PricingPlan {
+  id: string;
+  name: string;
+  badge?: string;
+  description: string;
+  priceInr: number;
+  credits: number | "unlimited";
+  unitDescription: string;
+  popular?: boolean;
+  features: string[];
+  ctaText: string;
+}
+
+export interface UserSubscriptionState {
+  tier: SubscriptionTier;
+  creditsRemaining: number;
+  unlockedProjectIds: string[];
+  totalReportsGenerated: number;
+  subscriptionExpiresAt?: string;
+}
+

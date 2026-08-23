@@ -11,6 +11,7 @@ import { useTheme } from "@/context/ThemeContext";
 import { notifyError, notifySuccess } from "@/lib/toast";
 import { cn } from "@/lib/utils";
 import { CartDrawer } from "@/components/cart/CartDrawer";
+import { CreditBadge } from "@/components/subscription/CreditBadge";
 import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 
 export function Nav({
@@ -59,6 +60,12 @@ export function Nav({
           {minimal && (
             <div className="ml-auto flex flex-wrap items-center justify-end gap-3 text-sm">
               <Link
+                href="/pricing"
+                className="text-foreground transition-colors hover:text-accent"
+              >
+                Pricing
+              </Link>
+              <Link
                 href="/projects"
                 className="text-foreground transition-colors hover:text-accent"
               >
@@ -91,6 +98,21 @@ export function Nav({
                   {l.label}
                 </Link>
               ))}
+
+              <Link
+                href="/pricing"
+                className={cn(
+                  "relative pb-1 text-foreground transition-colors duration-300 after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-full after:origin-left after:scale-x-0 after:rounded-full after:bg-accent after:transition-transform after:duration-300 hover:text-accent hover:after:scale-x-100",
+                  pathname === "/pricing" &&
+                    "font-medium text-accent after:scale-x-100",
+                )}
+              >
+                Pricing
+              </Link>
+
+              {/* Real-time Credits Badge */}
+              <CreditBadge size="sm" />
+
               {!projectId && (
                 <button
                   type="button"

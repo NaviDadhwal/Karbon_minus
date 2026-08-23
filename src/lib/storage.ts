@@ -69,3 +69,42 @@ export function saveActiveProjectId(id: string | null): void {
   if (id === null) localStorage.removeItem(ACTIVE_KEY);
   else localStorage.setItem(ACTIVE_KEY, id);
 }
+
+const SUBSCRIPTION_KEY = "ecn_subscription_state";
+
+export const DEFAULT_SUBSCRIPTION_STATE: import("@/types").UserSubscriptionState = {
+  tier: "free",
+  creditsRemaining: 1, // 1 Free report credit for all users on onboarding
+  unlockedProjectIds: [],
+  totalReportsGenerated: 0,
+};
+
+export function loadSubscriptionState(): import("@/types").UserSubscriptionState {
+  if (typeof window === "undefined") return DEFAULT_SUBSCRIPTION_STATE;
+  try {
+    const raw = localStorage.getItem(SUBSCRIPTION_KEY);
+    if (!raw) return DEFAULT_SUBSCRIPTION_STATE;
+    const parsed = JSON.parse(raw);
+    return {
+      tier: parsed.tier ?? "free",
+      creditsRemaining: typeof parsed.creditsRemaining === "number" ? parsed.creditsRemaining : 1,
+      unlockedProjectIds: Array.isArray(parsed.unlockedProjectIds) ? parsed.unlockedProjectIds : [],
+      totalReportsGenerated: typeof parsed.totalReportsGenerated === "number" ? parsed.totalReportsGenerated : 0,
+      subscriptionExpiresAt: parsed.subscriptionExpiresAt,
+    };
+  } catch {
+    return DEFAULT_SUBSCRIPTION_STATE;
+  }
+}
+
+export function saveSubscriptionState(state: import("@/types").UserSubscriptionState): boolean {
+  if (typeof window === "undefined") return true;
+  try {
+    localStorage.setItem(SUBSCRIPTION_KEY, JSON.stringify(state));
+    return true;
+  } catch (e) {
+    console.error("LocalStorage save subscription failed", e);
+    return false;
+  }
+}
+

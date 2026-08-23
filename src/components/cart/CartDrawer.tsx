@@ -17,7 +17,9 @@ import {
   QrCode,
 } from "lucide-react";
 import { useProject } from "@/context/ProjectContext";
+import { useSubscription } from "@/context/SubscriptionContext";
 import { AvailabilityBadge } from "@/components/ui/AvailabilityBadge";
+import { CreditBadge } from "@/components/subscription/CreditBadge";
 import { getSemiconductorRisk } from "@/lib/availability";
 import { formatInr, formatKgCo2e } from "@/lib/utils";
 import { getMaterialById } from "@/lib/db";
@@ -39,6 +41,7 @@ export function CartDrawer({
     updateMaterialQuantity,
     addMaterial,
   } = useProject();
+  const { hasProjectAccess } = useSubscription();
 
   const [mounted, setMounted] = useState(false);
 
@@ -59,6 +62,8 @@ export function CartDrawer({
   }, [isOpen]);
 
   if (!mounted) return null;
+
+  const isUnlocked = project ? hasProjectAccess(project.id) : false;
 
   // Real-time totals
   const totalCost = materials.reduce((acc, m) => acc + (m.totalCost || 0), 0);
@@ -120,13 +125,16 @@ export function CartDrawer({
             </div>
           </div>
 
-          <button
-            onClick={onClose}
-            aria-label="Close cart"
-            className="p-2 rounded-xl text-muted hover:text-foreground hover:bg-white/5 border border-transparent hover:border-white/10 transition"
-          >
-            <X className="w-5 h-5" />
-          </button>
+          <div className="flex items-center gap-2">
+            <CreditBadge size="sm" />
+            <button
+              onClick={onClose}
+              aria-label="Close cart"
+              className="p-2 rounded-xl text-muted hover:text-foreground hover:bg-white/5 border border-transparent hover:border-white/10 transition"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
         </div>
 
         {/* Real-Time Live Metrics Overview */}
@@ -160,10 +168,12 @@ export function CartDrawer({
                   <span className="flex items-center gap-1 font-medium">
                     <Leaf className="w-3.5 h-3.5 text-accent" /> Total Carbon
                   </span>
-                  <span className="font-mono text-[11px]">{carbonPercentage}% of cap</span>
+                  <span className="font-mono text-[11px]">
+                    {isUnlocked ? `${carbonPercentage}% of cap` : "Locked (Paid)"}
+                  </span>
                 </div>
                 <div className="text-base font-bold text-white font-mono">
-                  {formatKgCo2e(totalCarbon)}
+                  {isUnlocked ? formatKgCo2e(totalCarbon) : "••••• kgCO₂e"}
                 </div>
                 <div className="w-full bg-white/10 h-1.5 rounded-full overflow-hidden">
                   <div
@@ -266,7 +276,9 @@ export function CartDrawer({
                       </div>
                       <div className="border-l border-white/10 pl-3">
                         <span className="text-[10px] text-muted block">Carbon</span>
-                        <span className="font-bold text-emerald-400 font-mono">{formatKgCo2e(lineCarbon)}</span>
+                        <span className="font-bold text-emerald-400 font-mono">
+                          {isUnlocked ? formatKgCo2e(lineCarbon) : "Paid Tier"}
+                        </span>
                       </div>
                     </div>
 
@@ -338,7 +350,7 @@ export function CartDrawer({
                 className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-accent text-black font-bold text-sm transition hover:opacity-90 shadow-lg shadow-accent/20"
               >
                 <FileSpreadsheet className="w-4 h-4 text-black" />
-                <span>Generate Carbon Report</span>
+                <span>{isUnlocked ? "View Full Carbon Report" : "Generate Carbon Report (Paid)"}</span>
                 <ArrowRight className="w-4 h-4" />
               </Link>
             )}
@@ -357,3 +369,4 @@ export function CartDrawer({
     </>
   );
 }
+
